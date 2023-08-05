@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">MyMoney</string>
+    <string name="txtTitreAppli">My Money ! (didou)</string>
+    <string name="txtSolde"> Solde (€) : </string>
+    <string name="txtDate"> Date : </string>
+    <string name="txtLibelle">Bénéficiaire :</string>
+    <string name="txtMontant">Montant : </string>
+    <string name="NomDuCompte">Caisse Epargne Normandie</string>
+    <string name="longtexte">
+        "+Date : 27/07/2023 , Salaire , 2002.88 € , Solde = 2088.36\n"
+        "-Date : 26/07/2023 , CB Asian Kitchen , 11.50 € , Solde = 2076,86\n"</string>
+    <string name="MESSAGE_NOM_DU_COMPTE">NomDuCompte</string>
+</resources>

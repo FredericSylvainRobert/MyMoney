@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:layout_alignParentStart="false"
+        android:layout_centerVertical="false"
+        android:textAlignment="center"
+        tools:context=".GestionFichier">
+
+        <TextView
+            android:id="@+id/txtBandeauHaut"
+            android:layout_width="match_parent"
+            android:layout_height="67dp"
+            android:background="@color/BleuMoney"
+            android:text="@string/txtTitreAppli"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="40sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.039" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="424dp"
+        android:layout_below="@+id/txtBandeauHaut"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Sélectionnez votre fichier"
+            android:textColor="@color/black"
+
+            android:textAlignment="center"
+            android:textSize="34sp" />
+
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:id="@+id/groupeBoutton">
+
+            <RadioButton
+                android:id="@+id/fichier1"
+                android:textColor="@color/black"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="checkbutton"
+                android:text="Fichier1"
+                android:textAlignment="center"
+                android:textSize="20sp"
+                android:checked="true" />
+
+            <RadioButton
+                android:id="@+id/fichier2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="checkbutton"
+                android:text="Fichier 2"
+                android:textAlignment="center"
+                android:textSize="20sp"
+                android:textColor="@color/black"
+                />
+
+            <RadioButton
+                android:id="@+id/fichier3"
+                android:textColor="@color/black"
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="checkbutton"
+                android:text="Fichier 3"
+                android:textAlignment="center"
+                android:textSize="20sp" />
+
+        </RadioGroup>
+
+        <Button
+            android:id="@+id/buttonValide"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Valide" />
+
+    </LinearLayout>
+
+
+</RelativeLayout>
+

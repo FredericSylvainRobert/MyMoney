@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:layout_alignParentStart="false"
+    android:layout_centerVertical="false"
+    android:textAlignment="center"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/txtBandeauHaut"
+        android:layout_width="match_parent"
+        android:layout_height="67dp"
+        android:background="@color/BleuMoney"
+        android:text="@string/txtTitreAppli"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="40sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.039" />
+
+    <TextView
+        android:id="@+id/txtSolde"
+        android:layout_width="238dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="false"
+        android:layout_alignParentBottom="true"
+        android:background="@color/BleuMoney"
+        android:text="@string/txtSolde"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="30sp" />
+
+    <TextView
+        android:id="@+id/lblSolde"
+        android:layout_width="163dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="0dp"
+        android:layout_toEndOf="@+id/txtSolde"
+        android:text="1000,00 €"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="25dp" />
+
+    <ImageButton
+        android:id="@+id/imageButton"
+        android:layout_width="133dp"
+        android:layout_height="131dp"
+        android:layout_above="@+id/txtSolde"
+        android:layout_marginBottom="0dp"
+        android:background="@color/white"
+        app:srcCompat="@drawable/plus" />
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/buttonSave"
+        android:layout_below="@+id/lblNomCompte"
+        android:layout_marginTop="0dp"
+        android:layout_marginBottom="0dp"
+        android:id="@+id/scrollView">
+
+        <TextView
+            android:id="@+id/HistoriqueCompte"
+            android:layout_width="match_parent"
+            android:layout_height="356dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:includeFontPadding="false"
+            android:background="#eef"
+            android:textColor="@color/black"
+
+            android:scrollbars="vertical"
+            android:text="Ici sera ecrit l'histoire du compte"
+            android:textSize="15dp" />
+    </ScrollView>
+
+    <TextView
+        android:id="@+id/lblNomCompte"
+        android:layout_width="322dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtBandeauHaut"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="89dp"
+        android:background="@color/white"
+        android:textColor="@color/black"
+
+        android:text="Nom du Compte "
+        android:textAlignment="center"
+        android:textSize="30dp"
+        android:textStyle="italic" />
+    <ImageButton
+        android:id="@+id/imageButton2"
+        android:background="@color/white"
+        android:layout_width="151dp"
+        android:layout_height="130dp"
+        android:layout_above="@+id/txtSolde"
+        android:layout_marginStart="-2dp"
+        android:layout_marginBottom="5dp"
+        android:layout_toEndOf="@+id/imageButton"
+        app:srcCompat="@drawable/moins" />
+
+    <Button
+        android:id="@+id/buttonLoad"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/imageButton"
+        android:layout_marginBottom="3dp"
+        android:background="@color/white"
+        android:text="Charge" />
+
+    <Button
+        android:id="@+id/buttonSave"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/imageButton2"
+        android:background="@color/white"
+        android:layout_marginStart="50dp"
+        android:layout_marginBottom="0dp"
+        android:layout_toEndOf="@+id/buttonLoad"
+        android:text="Sauve" />
+
+    <ImageButton
+        android:id="@+id/buttonCrea"
+        android:layout_width="67dp"
+        android:layout_height="70dp"
+        android:layout_below="@+id/txtBandeauHaut"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="6dp"
+        app:srcCompat="@drawable/iconecreation" />
+
+    <Button
+        android:id="@+id/buttonChoixFichier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/scrollView"
+        android:layout_marginStart="38dp"
+        android:layout_marginTop="0dp"
+        android:layout_toEndOf="@+id/buttonSave"
+        android:text="Choix Fichier" />
+
+</RelativeLayout>

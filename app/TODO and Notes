@@ -1,0 +1,68 @@
+//////////////////////////////////////////////////////////////*
+    //
+    // TODO 2 Ajuster le bon tri des lignes de compte.
+    //
+    //
+    //
+    //              TODO a faire ou en cours !
+    // .
+    // TODO Adapter la couleur du texte dans historique du compte en fonction debit/crédit/virement
+    // TODO Creer la page virement
+    // TODO Mettre dans l'ordre chronologique l'historique de compte position/Beneficiaire/montant
+    // TODO gerer la repetition des operations
+//////////////////////////////////////////////////////////////
+
+
+ Operation (String nomCompte,String benef,int typeop ,float mont,int freq, int Jour, int Mois, int Annee,int Position)
+    /* Structure de MyMoney
+
+    IDE interface graphique => MainActivity
+                |                    = > Livres de comptes x 3 Comptes gérés maxi
+                |___\                             = Livre de comptes contient les historiques de chaque operation.
+                    / gère l'afficahge globale                           Beneficiaire / Date / montant / Solde / répétition
+     */
+/* ArrayList  Monothread , accès direct,
+    Capacité != taille
+    ajout d'une ligne : ArrayList.add(Variable);
+    Lancer une methode sur tout le group :
+    for(Operation operation : livredecompte)
+            operation.methode();
+    acceder à une ligne particulière : livredecompte.get(index);
+    livredecompte.remove(i) enlève l'entree i;
+
+    Methode Array :
+            binarySearch
+            compare
+            compareUnsigned
+            copyOf
+            copyOfRange
+            deepEqual
+            equals
+            fill
+            hashCode
+            mismatch
+            parallelSort
+            setAll
+            sort
+
+
+
+*/  // Info ARRAY LIST
+
+/* STRING !!!!!
+  s.concat(s2) =>  s+s2 dans s
+  s.concat("/").concat(s2) => s+'/'+s2 dans s
+  s.lenght() donne la longueur de s
+  s.toUpperCase  mets en majuscule  s.toLowerCase mets en minuscule
+  s.trim(" ") supprime tous les espaces à la fin de la ligne seulement !.
+  s.replace("a","b") remplace les 'a' par des 'b'
+  s.charAt(index) donne le caratère à l'index (commence à 0)
+  s.substring(0,3) donne les 3 premières lettres de s.
+  s.equals(s2) compare en boolean les deux chaines.
+  s.compareTo(s2) donne l'écart par rapport à la table ASCII
+La CLASSE StringTokenizer
+        String s="news/titre de la news/14";   String morceau="";
+        StringTokenizer st= new StringTokenizer(s,"/");
+        while(st.hasMoreToken())
+            morceau=st.NextToken();
+ */  // info STRING !!!
