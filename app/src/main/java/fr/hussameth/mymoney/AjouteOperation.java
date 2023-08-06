@@ -10,6 +10,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import java.util.Calendar;
@@ -31,6 +33,11 @@ public class AjouteOperation extends AppCompatActivity {
 
     private DatePickerDialog datePickerDialog;
     private Button dateButton;
+    RadioGroup groupeBoutton;
+    RadioButton boutton;
+    RadioButton boutton1;
+    RadioButton boutton2;
+    RadioButton boutton3;
     //
     //
 
@@ -53,6 +60,10 @@ public class AjouteOperation extends AppCompatActivity {
         dateButton=findViewById(R.id.datePickerButton);
         dateButton.setOnClickListener(dateButtonListener);
         date.setText(getTodayDate());
+        groupeBoutton=findViewById(R.id.groupeBouttonFreq);
+        boutton1=findViewById(R.id.freq1);
+        boutton2=findViewById(R.id.freq2);
+        boutton3=findViewById(R.id.freq3);
         //ajouteButton=(ImageButton) findViewById(R.id.imageButton);
         //ajouteButton.setOnClickListener(ajouteBoutonListener);
 
@@ -139,7 +150,22 @@ public class AjouteOperation extends AppCompatActivity {
 
     return day + "/" + month + "/" + year;
     }
+    public void checkbutton(View v){
+        String reponse="";
+        int bouttonRadioId= groupeBoutton.getCheckedRadioButtonId();
+        boutton=findViewById(bouttonRadioId);
+        reponse=boutton.getText().toString();
+        Log.i("DEBUG","Reponse frequence="+reponse);
+        // 0 pas de répétition, 10 tous les mois , 20 tous les 2 mois, 30 toutes les semaines (jour fixe)
 
+        //boutton1.setText(nom1);
+        //boutton2.setText(nom2);
+        //boutton3.setText(nom3);
+
+        //boutton=findViewById(bouttonRadioId);
+        //boutton.setText(nomDuCompte.getText());
+        //Log.i("DEBUG","BouttonID"+bouttonRadioId);
+    }
 
 
 
