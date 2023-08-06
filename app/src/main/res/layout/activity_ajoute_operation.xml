@@ -64,6 +64,7 @@
         android:layout_alignParentRight="true"
         android:layout_marginTop="20dp"
         android:text="Nom du Compte "
+        android:textColor="@color/black"
         android:textSize="30dp"
         android:textStyle="italic" />
 
@@ -75,6 +76,7 @@
         android:layout_below="@+id/lblNomCompteAjoute"
         android:layout_marginTop="20dp"
         android:text="@string/txtDate"
+        android:textColor="@color/black"
         android:textSize="20dp" />
 
     <EditText
@@ -91,6 +93,7 @@
         android:ems="10"
         android:hint="JJ/MM/AAAA"
         android:inputType="date"
+        android:textColor="@color/black"
         android:textAlignment="center" />
 
     <Button
@@ -122,6 +125,7 @@
         android:layout_marginTop="100dp"
         android:background="@color/white"
         android:text="@string/txtLibelle"
+        android:textColor="@color/black"
         android:textSize="20dp" />
 
     <EditText
@@ -135,6 +139,7 @@
         android:layout_toEndOf="@+id/txtBeneficiaire"
         android:background="@color/white"
         android:ems="10"
+        android:textColor="@color/black"
         android:hint=" Bénéficiaire "
         android:inputType="text"
         android:textAlignment="center" />
@@ -147,6 +152,7 @@
         android:layout_below="@+id/txtBeneficiaire"
         android:layout_marginTop="20dp"
         android:text="@string/txtMontant"
+        android:textColor="@color/black"
         android:textSize="20dp"
         android:onClick="openDatePicker"/>
 

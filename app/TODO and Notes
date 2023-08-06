@@ -1,11 +1,11 @@
 //////////////////////////////////////////////////////////////*
-    //
+    //    //              TODO a faire ou en cours !
+
     // TODO 2 Ajuster le bon tri des lignes de compte.
     //
     //
     //
-    //              TODO a faire ou en cours !
-    // .
+    // TODO pouvoir modifier une ligne .
     // TODO Adapter la couleur du texte dans historique du compte en fonction debit/crédit/virement
     // TODO Creer la page virement
     // TODO Mettre dans l'ordre chronologique l'historique de compte position/Beneficiaire/montant

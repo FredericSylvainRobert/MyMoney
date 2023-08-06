@@ -120,6 +120,9 @@ public class AjouteOperation extends AppCompatActivity {
             data.putExtra("Beneficiaire", beneficiaire.getText().toString());
             data.putExtra("Date",date.getText().toString());
             data.putExtra("TYPE OPERATION",typop.getText().toString());
+            data.putExtra("frequence",boutton.getText().toString());
+
+            // 0 pas de répétition, 10 tous les mois , 20 tous les 2 mois, 30 toutes les semaines (jour fixe)
             setResult(RESULT_OK, data); // Tout est ok, on peut envoyer
             finish();
         }
