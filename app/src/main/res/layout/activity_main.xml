@@ -67,15 +67,14 @@
         android:layout_below="@+id/lblNomCompte"
         android:layout_marginTop="0dp"
         android:layout_marginBottom="0dp"
+        android:fillViewport="true"
         android:id="@+id/scrollView">
 
         <TextView
             android:id="@+id/HistoriqueCompte"
             android:layout_width="match_parent"
             android:layout_height="356dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="20dp"
+            android:layout_margin="20dp"
             android:includeFontPadding="false"
             android:background="#eef"
             android:textColor="@color/black"

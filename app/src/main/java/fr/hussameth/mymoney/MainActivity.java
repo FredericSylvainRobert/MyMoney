@@ -108,8 +108,9 @@ public class MainActivity extends AppCompatActivity {
         boutonChoixFichier.setOnClickListener(choixFichierBoutonListener);
         init();// appelle la fonction Init
     }
-
-    // Cette methode permet de creer le lien avec les deux activités
+    //
+    // Cette methode permet de creer le lien avec les autres activités
+    //
     ActivityResultLauncher<Intent> activityResultLauncherAjoute =
             registerForActivityResult(
                     new ActivityResultContracts.StartActivityForResult(),
@@ -242,138 +243,9 @@ public class MainActivity extends AppCompatActivity {
             );
 
 
-    private void afficheHistoriqueCompte()  // Rempli historiqueCompte par livredecompte
-    {
-        String longTexte="";
-        int i=0;
-        Log.i("DEBUG","afficheHistoriqueCompte:livredecompte size="+livredecompte.size());
-        //for(i=0;i<livredecompte.size();i++)
-        //    longTexte=longTexte+livredecompte.get(i).afficheOperationString();
-        //Log.i("DEBUG","Affiche historqiue compte long texte="+longTexte);
-        historiqueCompte.setText("");
-
-        //historiqueCompte.setText("Efface tout!");
-        for (Operation operation : livredecompte)
-            historiqueCompte.append(operation.afficheOperationString());
-        int k=0;
-        soldeNum=0;
-        for(k=0;k<livredecompte.size();k++)
-            {
-            livredecompte.get(k).afficheLog();
-            if (livredecompte.get(k).getTypeOperation()==0) soldeNum-=livredecompte.get(k).getMontant();
-            if (livredecompte.get(k).getTypeOperation()==1) soldeNum+=livredecompte.get(k).getMontant();
-            if (livredecompte.get(k).getTypeOperation()==2) soldeNum-=livredecompte.get(k).getMontant();
-            }
-        solde.setText(String.valueOf(soldeNum));
-    }
-
-    private void init() {
-        // On charge le fichier Historique.TXT
-        soldeNum = Float.valueOf("0.00");
-        typeOperation = 0; // par defaut debit
-        nomDuCompte.setText(R.string.NomDuCompte);
-        solde.setText(soldeNum + " €");
-        historiqueCompte.setText("");
-        testsifichierexiste();
-        loadLivredecompte(premierfichier());
-        afficheHistoriqueCompte();
-        nomDuCompte.setText(livredecompte.get(0).getNomDuCompte());
-        Log.i("DEBUG","Passage par la fonction Init()");
-
-    }
-
-    public void ajouteLigneDeCompte(String ligne) // on ajoute la ligne de compte à ArrayList<Operation> livredecompte
-    {
-        int position = 0;
-        int typeOperation = 0;
-        String jour = "01";
-        int jourInt = Integer.parseInt(jour);
-        String mois = "01";
-        int moisInt = Integer.parseInt(mois);
-        String annee = "2000";
-        int anneeInt = Integer.parseInt(annee);
-        String beneficiaire = "aucun";
-        String freq = "0";
-        int freqInt = Integer.parseInt(freq);
-        String montant = "0.00";
-        float montantFloat = Float.parseFloat(montant);
-        String NomCompte = "Caisse Epargne Normandie"; /////// ICI on ne récupère pas le nom du compte(c'est le nom du fichier)
-        Operation operation = new Operation(NomCompte, beneficiaire, typeOperation, montantFloat, freqInt, jourInt, moisInt, anneeInt, calculpositiondate(jourInt, moisInt, anneeInt));
-        int i = 0;
-        int k = 0;
-        while (ligne.charAt(i) != ',') i++;
-        operation.setPosition(Integer.parseInt(ligne.substring(0, i)));
-        i++;
-        k = i;
-        while (ligne.charAt(i) != ',') i++;
-        operation.setNomDuCompte(ligne.substring(k, i));
-        i++;
-        k = i;
-        while (ligne.charAt(i) != ',') i++;
-        operation.setBenef(ligne.substring(k, i));
-        i++;
-        k = i;
-        while (ligne.charAt(i) != ',') i++;
-        operation.setTypeOperation(Integer.parseInt(ligne.substring(k, i)));
-        i++;
-        k = i;
-        while (ligne.charAt(i) != ',') i++;
-        operation.setMontant(Float.parseFloat(ligne.substring(k, i)));
-        i++;
-        k = i;
-        /*if (operation.getTypeOperation() == 0) soldeNum = soldeNum - operation.getMontant();
-        if (operation.getTypeOperation() == 1) soldeNum = soldeNum + operation.getMontant();
-        if (operation.getTypeOperation() == 2) soldeNum = soldeNum - operation.getMontant();
-        solde.setText(String.valueOf(soldeNum));*/
-        Log.i("DEBUG","AjouteLigneDeCompte : Solde : "+solde.getText().toString()+"Operation n°:"+livredecompte.size());
-        while (ligne.charAt(i) != ',') i++;
-        operation.setFrequence(Integer.parseInt(ligne.substring(k, i)));
-        i++;
-        k = i;
-        while (ligne.charAt(i) != ',') i++;
-        operation.setJour(Integer.parseInt(ligne.substring(k, i)));
-        i++;
-        k = i;
-        while (ligne.charAt(i) != ',') i++;
-        operation.setMois(Integer.parseInt(ligne.substring(k, i)));
-        i++;
-        k = i;
-        operation.setAnnee(Integer.parseInt(ligne.substring(k, i + 4)));
-        i++;
-        k = i;
-        rangeParDate(operation, calculpositiondate(operation.getJour(), operation.getMois(), operation.getAnnee()));
-    }
-
-    //*
-    private void rangeParDate(Operation op, int position) {
-        int i=0;
-        int j=livredecompte.size();
-        boolean ajoute=false;
-        if (j != 0)
-            while (i < j) {
-                Log.i("DEBUG","i="+i+"j="+j+"position cherchée=" + position+"/livredecompteposition="+livredecompte.get(i).getPosition());
-                if (position < livredecompte.get(i).getPosition())
-                    {
-                        Log.i("DEBUG","Trouvé i="+i);
-                        livredecompte.add(i, op);ajoute=true;
-                        i = j - 1;
-                    }
-                i++;
-            }
-        if (j == 0) livredecompte.add(op);
-        if (ajoute==false&& j!=0) livredecompte.add(op); // on ajoute à la fin
-        Log.i("DEBUG","Ajout à la fin");
-        //afficheHistoriqueCompte();
-
-
-    }
-
-    private int calculpositiondate(int jour, int mois, int annee) {
-        int position = 1;
-        position = jour + mois * 31 + annee * 365;
-        return position;
-
-    }
+    //
+    //      Déclaration des boutons Listenner
+    //
     private View.OnClickListener creationBoutonListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -442,8 +314,137 @@ public class MainActivity extends AppCompatActivity {
             saveLivredeCompte();// Revoir la video https://www.youtube.com/watch?v=EcfUkjlL9RI
         }
     };
+    private void afficheHistoriqueCompte()  // Rempli historiqueCompte par livredecompte
+    {
+        String longTexte="";
+        int i=0;
+        Log.i("DEBUG","afficheHistoriqueCompte:livredecompte size="+livredecompte.size());
+        //for(i=0;i<livredecompte.size();i++)
+        //    longTexte=longTexte+livredecompte.get(i).afficheOperationString();
+        //Log.i("DEBUG","Affiche historqiue compte long texte="+longTexte);
+        historiqueCompte.setText("");
+
+        //historiqueCompte.setText("Efface tout!");
+        for (Operation operation : livredecompte)
+            historiqueCompte.append(operation.afficheOperationString());
+        int k=0;
+        soldeNum=0;
+        for(k=0;k<livredecompte.size();k++)
+        {
+            livredecompte.get(k).afficheLog();
+            if (livredecompte.get(k).getTypeOperation()==0) soldeNum-=livredecompte.get(k).getMontant();
+            if (livredecompte.get(k).getTypeOperation()==1) soldeNum+=livredecompte.get(k).getMontant();
+            if (livredecompte.get(k).getTypeOperation()==2) soldeNum-=livredecompte.get(k).getMontant();
+            soldeNum=Math.round(soldeNum*100);
+            //Log.i("DEBUG","SoldeNum*100="+soldeNum);
+            soldeNum=soldeNum/100;
+            //Log.i("DEBUG","SoldeNum="+soldeNum);
+        }
+        solde.setText(String.valueOf(soldeNum));
+    }
+    private void init() {
+        // On charge le fichier Historique.TXT
+        soldeNum = Float.valueOf("0.00");
+        typeOperation = 0; // par defaut debit
+        nomDuCompte.setText(R.string.NomDuCompte);
+        solde.setText(soldeNum + " €");
+        historiqueCompte.setText("");
+        testsifichierexiste();
+        loadLivredecompte(premierfichier());
+        afficheHistoriqueCompte();
+        nomDuCompte.setText(livredecompte.get(0).getNomDuCompte());
+        Log.i("DEBUG","Passage par la fonction Init()");
+
+    }
+    public void ajouteLigneDeCompte(String ligne) // on ajoute la ligne de compte à ArrayList<Operation> livredecompte
+    {
+        int position = 0;
+        int typeOperation = 0;
+        String jour = "01";
+        int jourInt = Integer.parseInt(jour);
+        String mois = "01";
+        int moisInt = Integer.parseInt(mois);
+        String annee = "2000";
+        int anneeInt = Integer.parseInt(annee);
+        String beneficiaire = "aucun";
+        String freq = "0";
+        int freqInt = Integer.parseInt(freq);
+        String montant = "0.00";
+        float montantFloat = Float.parseFloat(montant);
+        String NomCompte = "Caisse Epargne Normandie"; /////// ICI on ne récupère pas le nom du compte(c'est le nom du fichier)
+        Operation operation = new Operation(NomCompte, beneficiaire, typeOperation, montantFloat, freqInt, jourInt, moisInt, anneeInt, calculpositiondate(jourInt, moisInt, anneeInt));
+        int i = 0;
+        int k = 0;
+        while (ligne.charAt(i) != ',') i++;
+        operation.setPosition(Integer.parseInt(ligne.substring(0, i)));
+        i++;
+        k = i;
+        while (ligne.charAt(i) != ',') i++;
+        operation.setNomDuCompte(ligne.substring(k, i));
+        i++;
+        k = i;
+        while (ligne.charAt(i) != ',') i++;
+        operation.setBenef(ligne.substring(k, i));
+        i++;
+        k = i;
+        while (ligne.charAt(i) != ',') i++;
+        operation.setTypeOperation(Integer.parseInt(ligne.substring(k, i)));
+        i++;
+        k = i;
+        while (ligne.charAt(i) != ',') i++;
+        operation.setMontant(Float.parseFloat(ligne.substring(k, i)));
+        i++;
+        k = i;
+        /*if (operation.getTypeOperation() == 0) soldeNum = soldeNum - operation.getMontant();
+        if (operation.getTypeOperation() == 1) soldeNum = soldeNum + operation.getMontant();
+        if (operation.getTypeOperation() == 2) soldeNum = soldeNum - operation.getMontant();
+        solde.setText(String.valueOf(soldeNum));*/
+        Log.i("DEBUG","AjouteLigneDeCompte : Solde : "+solde.getText().toString()+"Operation n°:"+livredecompte.size());
+        while (ligne.charAt(i) != ',') i++;
+        operation.setFrequence(Integer.parseInt(ligne.substring(k, i)));
+        i++;
+        k = i;
+        while (ligne.charAt(i) != ',') i++;
+        operation.setJour(Integer.parseInt(ligne.substring(k, i)));
+        i++;
+        k = i;
+        while (ligne.charAt(i) != ',') i++;
+        operation.setMois(Integer.parseInt(ligne.substring(k, i)));
+        i++;
+        k = i;
+        operation.setAnnee(Integer.parseInt(ligne.substring(k, i + 4)));
+        i++;
+        k = i;
+        rangeParDate(operation, calculpositiondate(operation.getJour(), operation.getMois(), operation.getAnnee()));
+    }
+    private void rangeParDate(Operation op, int position) {
+        int i=0;
+        int j=livredecompte.size();
+        boolean ajoute=false;
+        if (j != 0)
+            while (i < j) {
+                Log.i("DEBUG","i="+i+"j="+j+"position cherchée=" + position+"/livredecompteposition="+livredecompte.get(i).getPosition());
+                if (position < livredecompte.get(i).getPosition())
+                {
+                    Log.i("DEBUG","Trouvé i="+i);
+                    livredecompte.add(i, op);ajoute=true;
+                    i = j - 1;
+                }
+                i++;
+            }
+        if (j == 0) livredecompte.add(op);
+        if (ajoute==false&& j!=0) livredecompte.add(op); // on ajoute à la fin
+        Log.i("DEBUG","Ajout à la fin");
+        //afficheHistoriqueCompte();
 
 
+    }
+    private int calculpositiondate(int jour, int mois, int annee) {
+        int position = 1;
+        position = jour + mois * 31 + annee * 365;
+        return position;
+
+    }
     private void saveLivredeCompte() {
         //String historique = historiqueCompte.getText().toString();
         FileOutputStream fos = null;
@@ -470,7 +471,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-
     private void loadLivredecompte(String fichier) {
         Log.i("DEBUG","loadLivredecompte:"+fichier);
         FileInputStream fis = null;
