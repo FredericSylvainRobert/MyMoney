@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////*
-    //    //              TODO a faire ou en cours !
-
-    // TODO 2 Ajuster le bon tri des lignes de compte.
+    //                  TODO a faire ou en cours !
+    //
+    // BUG ajoute ou retrait, l'operation s'annule automatiquement!!
     //
     //
     //

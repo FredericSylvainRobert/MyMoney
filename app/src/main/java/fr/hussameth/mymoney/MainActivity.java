@@ -23,21 +23,30 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
 
-    ArrayList<Operation> livredecompte = new ArrayList<>();  //création du livre de 1 compte
+    ArrayList<Operation> livredecompte = new ArrayList<>(); //création du livre de 1 compte
+    ArrayList<Operation> repetition = new ArrayList<>();
     //private int nombredeligne; // nombre de ligne dans historique de compte
     //public Operation operation=new Operation("Caisse Epargne Normandie","Initialisation",1000, LocalDate.of(2000,01,01);
     private static final String FILE_NAME = "Default.txt";
-    private static final String FILE_NAME2 = "CaisseEpargne.txt";
     public static final String MESSAGE_MONTANT = "Montant";
     public static final String MESSAGE_BENEFICIAIRE = "Beneficiaire";
     public static final String MESSAGE_DATE = "Date";                              //CreationCompte
-    public static final String MESSAGE_NOM_DU_COMPTE_NOUVEAU="NouveauNomDuCompte"; //CreationCompte
-    public static final String MESSAGE_SOLDE="Solde";//CreationCompte
-    public static final String EXTENSION=".txt";
-
+    public static final String MESSAGE_NOM_DU_COMPTE_NOUVEAU = "NouveauNomDuCompte"; //CreationCompte
+    public static final String MESSAGE_SOLDE = "Solde";//CreationCompte
+    public static final String EXTENSION = ".txt";
+    //
+    //   les differents types de variable JAVA
+    //
+    /*public boolean bool=true; // false
+    public byte bit=0; // jusqu'à 255
+    public short shortvariable=-32768; //jusqu'à +32767
+    public int entier=-2147483648; // jusqu'à +2147483647
+    public long longentier=0; // -2^63 à 2^63
+    */
     private int typeOperation; // 0 = débit ; 1 = crédit ; 2 = virement
     protected ImageButton ajouteButton;
     protected ImageButton retraitButton;
@@ -51,42 +60,47 @@ public class MainActivity extends AppCompatActivity {
     private TextView solde;
     private TextView nomDuCompte;
     private float soldeNum = 0;
-    private String nomDuFichier="";
+    private String nomDuFichier = "";
 
-
-    @Override protected void onResume() {
+    @Override
+    protected void onResume() {
         super.onResume();
         Log.i("DEBUG", "onResume Called");
-        for (Operation operation : livredecompte)
-        {operation.afficheLog();Log.i("DEBUG","NomduCompte="+operation.getNomDuCompte());}
+        for (Operation operation : livredecompte) {
+            operation.afficheLog();
+            Log.i("DEBUG", "NomduCompte=" + operation.getNomDuCompte());
+        }
         //historiqueCompte.setText("onResume");
         historiqueCompte.setText("");
         for (Operation operation : livredecompte)
             historiqueCompte.append(operation.afficheOperationString());
     }
 
-    @Override protected void onRestart() {
+    @Override
+    protected void onRestart() {
         super.onRestart();
         Log.i("DEBUG", "onRestart Called");
     }
 
-    @Override protected void onPause() {
+    @Override
+    protected void onPause() {
         super.onPause();
         Log.i("DEBUG", "onPause Called");
     }
 
-    @Override protected void onStop() {
+    @Override
+    protected void onStop() {
         super.onStop();
         Log.i("DEBUG", "onStop Called");
     }
 
-    @Override protected void onDestroy() {
+    @Override
+    protected void onDestroy() {
         super.onDestroy();
         Log.i("DEBUG", "onDestroy Called");
     }
 
-
-        @Override
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -104,10 +118,12 @@ public class MainActivity extends AppCompatActivity {
         boutonSave.setOnClickListener(boutonSaveListener);
         creationButton = (ImageButton) findViewById(R.id.buttonCrea);
         creationButton.setOnClickListener(creationBoutonListener);
-        boutonChoixFichier=(Button) findViewById(R.id.buttonChoixFichier);
+        boutonChoixFichier = (Button) findViewById(R.id.buttonChoixFichier);
         boutonChoixFichier.setOnClickListener(choixFichierBoutonListener);
         init();// appelle la fonction Init
     }
+
+
     //
     // Cette methode permet de creer le lien avec les autres activités
     //
@@ -119,23 +135,22 @@ public class MainActivity extends AppCompatActivity {
                         public void onActivityResult(ActivityResult activityResult) {
                             int result = activityResult.getResultCode();
                             Intent data = activityResult.getData();
-
+                            Log.i("DEBUG","Result="+result);
                             if (result == RESULT_OK) {
-                                String donneeRetour = "";
-                                String montantString = "";
-                                String benef = "";
-                                String frequence="";
-                                int typop = 0;
+                                String donneeRetour;
+                                String montantString;
+                                String benef;
+                                String frequence;
+                                int typop;
                                 montantString = data.getStringExtra(MESSAGE_MONTANT);
                                 benef = data.getStringExtra(MESSAGE_BENEFICIAIRE);
                                 donneeRetour = data.getStringExtra(MESSAGE_DATE);
                                 typop = Integer.parseInt(data.getStringExtra("TYPE OPERATION"));
-                                frequence=data.getStringExtra("frequence");
+                                frequence = data.getStringExtra("frequence");
                                 //("DEBUG","Retour frequence"+frequence);
-
-                                int jour = 0;
-                                int mois = 0;
-                                int annee = 0;
+                                int jour;
+                                int mois;
+                                int annee;
                                 int i = 0;
                                 while (donneeRetour.charAt(i) != '/')
                                     i++;
@@ -147,14 +162,13 @@ public class MainActivity extends AppCompatActivity {
                                 mois = Integer.parseInt(donneeRetour.substring(j, i));
                                 i++;
                                 annee = Integer.parseInt((donneeRetour.substring(i, donneeRetour.length())));
-                                donneeRetour = data.getStringExtra("TYPE OPERATION");
                                 int posi = 0;
                                 posi = calculpositiondate(jour, mois, annee);
-                                if (frequence.equals("Tous les mois")) frequence="10";
-                                if (frequence.equals("Tous les 2 mois")) frequence="20";
-                                if (frequence.equals("une seul fois")) frequence="0";
-                                Log.i("DEBUG","frequence dans mainactivity"+frequence);
-                                    Operation operationajout = new Operation(nomDuCompte.getText().toString(), benef, typop, Float.valueOf(montantString),
+                                if (frequence.equals("Tous les mois")) frequence = "10";
+                                if (frequence.equals("Tous les 2 mois")) frequence = "20";
+                                if (frequence.equals("une seul fois")) frequence = "0";
+                                Log.i("DEBUG", "frequence dans mainactivity" + frequence);
+                                Operation operationajout = new Operation(nomDuCompte.getText().toString(), benef, typop, Float.valueOf(montantString),
                                         Integer.valueOf(frequence), jour, mois, annee, posi);
                                 nomDuCompte.setText(operationajout.getNomDuCompte());
                                 //operationajout.afficheLog();
@@ -170,10 +184,7 @@ public class MainActivity extends AppCompatActivity {
                                 Toast.makeText(MainActivity.this, "Opération annulée", Toast.LENGTH_LONG).show();
                             }
                         }
-
-
                     }
-
             );
 
     ActivityResultLauncher<Intent> activityResultLauncherCreation =
@@ -186,15 +197,15 @@ public class MainActivity extends AppCompatActivity {
                             //Log.i("DEBUG","Result="+result);
                             saveLivredeCompte();
                             Intent data = activityResult.getData();
-                            String Nomdufichier="";
-                            String DateString="";
-                            String SoldeInitialStr="";
+                            nomDuFichier = "";
+                            String DateString = "";
+                            String SoldeInitialStr = "";
                             //Log.i("DEBUG","Result="+result);
 
                             if (result == RESULT_OK) {
-                                Nomdufichier = data.getStringExtra(MESSAGE_NOM_DU_COMPTE_NOUVEAU);
-                                nomDuCompte.setText(Nomdufichier);
-                                //Log.i("DEBUG","Creation du fichier:"+Nomdufichier);
+                                nomDuFichier = data.getStringExtra(MESSAGE_NOM_DU_COMPTE_NOUVEAU);
+                                nomDuCompte.setText(nomDuFichier);
+                                //Log.i("DEBUG","Creation du fichier:"+nomDuFichier);
                                 DateString = data.getStringExtra(MESSAGE_DATE);
                                 SoldeInitialStr = data.getStringExtra(MESSAGE_SOLDE);
                                 solde.setText(SoldeInitialStr);
@@ -214,7 +225,7 @@ public class MainActivity extends AppCompatActivity {
                                 mois = Integer.parseInt(DateString.substring(j, i));
                                 i++;
                                 annee = Integer.parseInt((DateString.substring(i, DateString.length())));
-                                Operation op = new Operation(Nomdufichier, "Création", 1, Float.parseFloat(SoldeInitialStr), 0, jour, mois, annee, calculpositiondate(jour, mois, annee));
+                                Operation op = new Operation(nomDuFichier, "Création", 1, Float.parseFloat(SoldeInitialStr), 0, jour, mois, annee, calculpositiondate(jour, mois, annee));
                                 livredecompte.add(op);
                                 saveLivredeCompte();
                                 afficheHistoriqueCompte();
@@ -232,7 +243,7 @@ public class MainActivity extends AppCompatActivity {
                         public void onActivityResult(ActivityResult activityResult) {
                             int result = activityResult.getResultCode();
                             //("DEBUG","Result="+result);
-                            String fichier="";
+                            String fichier = "";
 
                             Intent data = activityResult.getData();
                             if (result == RESULT_OK) {
@@ -311,7 +322,7 @@ public class MainActivity extends AppCompatActivity {
     private View.OnClickListener boutonLoadListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            loadLivredecompte("Default.txt");  // Revoir la video https://www.youtube.com/watch?v=EcfUkjlL9RI
+            loadLivredecompte(FILE_NAME);  // Revoir la video https://www.youtube.com/watch?v=EcfUkjlL9RI
         }
     };
     private View.OnClickListener boutonSaveListener = new View.OnClickListener() {
@@ -321,10 +332,11 @@ public class MainActivity extends AppCompatActivity {
             saveLivredeCompte();// Revoir la video https://www.youtube.com/watch?v=EcfUkjlL9RI
         }
     };
+
     private void afficheHistoriqueCompte()  // Rempli historiqueCompte par livredecompte
     {
-        String longTexte="";
-        int i=0;
+        String longTexte = "";
+        int i = 0;
         //Log.i("DEBUG","afficheHistoriqueCompte:livredecompte size="+livredecompte.size());
         //for(i=0;i<livredecompte.size();i++)
         //    longTexte=longTexte+livredecompte.get(i).afficheOperationString();
@@ -334,21 +346,24 @@ public class MainActivity extends AppCompatActivity {
         //historiqueCompte.setText("Efface tout!");
         for (Operation operation : livredecompte)
             historiqueCompte.append(operation.afficheOperationString());
-        int k=0;
-        soldeNum=0;
-        for(k=0;k<livredecompte.size();k++)
-        {
+        int k = 0;
+        soldeNum = 0;
+        for (k = 0; k < livredecompte.size(); k++) {
             livredecompte.get(k).afficheLog();
-            if (livredecompte.get(k).getTypeOperation()==0) soldeNum-=livredecompte.get(k).getMontant();
-            if (livredecompte.get(k).getTypeOperation()==1) soldeNum+=livredecompte.get(k).getMontant();
-            if (livredecompte.get(k).getTypeOperation()==2) soldeNum-=livredecompte.get(k).getMontant();
-            soldeNum=Math.round(soldeNum*100);
+            if (livredecompte.get(k).getTypeOperation() == 0)
+                soldeNum -= livredecompte.get(k).getMontant();
+            if (livredecompte.get(k).getTypeOperation() == 1)
+                soldeNum += livredecompte.get(k).getMontant();
+            if (livredecompte.get(k).getTypeOperation() == 2)
+                soldeNum -= livredecompte.get(k).getMontant();
+            soldeNum = Math.round(soldeNum * 100);
             //Log.i("DEBUG","SoldeNum*100="+soldeNum);
-            soldeNum=soldeNum/100;
+            soldeNum = soldeNum / 100;
             //Log.i("DEBUG","SoldeNum="+soldeNum);
         }
         solde.setText(String.valueOf(soldeNum));
     }
+
     private void init() {
         // On charge le fichier Historique.TXT
         soldeNum = Float.valueOf("0.00");
@@ -359,11 +374,13 @@ public class MainActivity extends AppCompatActivity {
         testsifichierexiste();
         loadLivredecompte(premierfichier());
         afficheHistoriqueCompte();
+        Log.i("DEBUG", "Avant chercherepetion");
         chercherepetition();
         nomDuCompte.setText(livredecompte.get(0).getNomDuCompte());
         //Log.i("DEBUG","Passage par la fonction Init()");
 
     }
+
     public void ajouteLigneDeCompte(String ligne) // on ajoute la ligne de compte à ArrayList<Operation> livredecompte
     {
         int position = 0;
@@ -425,41 +442,44 @@ public class MainActivity extends AppCompatActivity {
         k = i;
         rangeParDate(operation, calculpositiondate(operation.getJour(), operation.getMois(), operation.getAnnee()));
     }
+
     private void rangeParDate(Operation op, int position) {
-        int i=0;
-        int j=livredecompte.size();
-        boolean ajoute=false;
+        int i = 0;
+        int j = livredecompte.size();
+        boolean ajoute = false;
         if (j != 0)
             while (i < j) {
                 //("DEBUG","i="+i+"j="+j+"position cherchée=" + position+"/livredecompteposition="+livredecompte.get(i).getPosition());
-                if (position < livredecompte.get(i).getPosition())
-                {
+                if (position < livredecompte.get(i).getPosition()) {
                     //Log.i("DEBUG","Trouvé i="+i);
-                    livredecompte.add(i, op);ajoute=true;
+                    livredecompte.add(i, op);
+                    ajoute = true;
                     i = j - 1;
                 }
                 i++;
             }
         if (j == 0) livredecompte.add(op);
-        if (ajoute==false&& j!=0) livredecompte.add(op); // on ajoute à la fin
+        if (ajoute == false && j != 0) livredecompte.add(op); // on ajoute à la fin
         //Log.i("DEBUG","Ajout à la fin");
         //afficheHistoriqueCompte();
 
 
     }
+
     private int calculpositiondate(int jour, int mois, int annee) {
         int position = 1;
         position = jour + mois * 31 + annee * 365;
         return position;
 
     }
+
     private void saveLivredeCompte() {
         //String historique = historiqueCompte.getText().toString();
         FileOutputStream fos = null;
-        String nomDuFichier=livredecompte.get(0).getNomDuCompte();
+        nomDuFichier = livredecompte.get(0).getNomDuCompte();
         //Log.i("DEBUG","Nom du ficheir a écrire:"+nomDuFichier);
         try {
-            fos = openFileOutput(nomDuFichier+EXTENSION, MODE_PRIVATE);
+            fos = openFileOutput(nomDuFichier + EXTENSION, MODE_PRIVATE);
             for (Operation operation : livredecompte)
                 fos.write(operation.SauveOperationString().getBytes());
             //historiqueCompte.setText("");
@@ -479,11 +499,12 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
     private void loadLivredecompte(String fichier) {
         //("DEBUG","loadLivredecompte:"+fichier);
         FileInputStream fis = null;
         try {
-            fis = openFileInput(fichier+EXTENSION);
+            fis = openFileInput(fichier + EXTENSION);
             InputStreamReader isr = new InputStreamReader(fis);
             BufferedReader br = new BufferedReader(isr);
             StringBuilder sb = new StringBuilder();
@@ -507,13 +528,12 @@ public class MainActivity extends AppCompatActivity {
                     throw new RuntimeException(e);
                 }
             } else {
-                Log.i("DEBUG","Impossible de charger le fichier");
+                Log.i("DEBUG", "Impossible de charger le fichier");
             }
         }
-
-
-
     }
+
+
     private void testsifichierexiste() {
         File fichierListe = new File("data/data/fr.hussameth.mymoney/files/Liste.txt");
         if (!fichierListe.exists()) {
@@ -523,16 +543,17 @@ public class MainActivity extends AppCompatActivity {
                 FileOutputStream fos = null;
                 try {
                     fos = openFileOutput("Liste.txt", MODE_PRIVATE);
-                        fos.write("Default\n".getBytes());
-                        fos.write("Default\n".getBytes());
-                        fos.write("Default\n".getBytes());
-
-
-                } catch (FileNotFoundException e) {
+                    fos.write("Default\n".getBytes());
+                    fos.write("Default\n".getBytes());
+                    fos.write("Default\n".getBytes());
+                }
+                catch (FileNotFoundException e) {
                     throw new RuntimeException(e);
-                } catch (IOException e) {
+                }
+                catch (IOException e) {
                     throw new RuntimeException(e);
-                } finally {
+                }
+                finally {
                     if (fos != null) {
                         try {
                             fos.close();
@@ -542,12 +563,14 @@ public class MainActivity extends AppCompatActivity {
 
                     }
                 }
-
-            } catch (IOException e) {
+            }
+            catch (IOException e) {
                 e.printStackTrace();
             }
         }
-        //("DEBUG","jusque là Ok");
+
+        //Creation par défaut du fichier DEFAULT.TXT
+
         File fichierDefault = new File("data/data/fr.hussameth.mymoney/files/Default.txt");
         if (!fichierDefault.exists()) {
             try {
@@ -574,19 +597,104 @@ public class MainActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
-    }
 
-    private void chercherepetition(){
-        //
+        // Creation par default du Fichier REPETITION.TXT
+
+        File fichierRepetition = new File("data/data/fr.hussameth.mymoney/files/Repetition.txt");
+        if (!fichierRepetition.exists()) {
+            try {
+                //("DEBUG","dois Creer le fichier Default.txt");
+                fichierRepetition.createNewFile();
+                FileOutputStream fos = null;
+                try {
+                    fos = openFileOutput("Repetition.txt", MODE_PRIVATE);
+                    fos.write("730032,Default,Création,1,0.0,0,1,1,2000*\n".getBytes());
+                } catch (FileNotFoundException e) {
+                    throw new RuntimeException(e);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                } finally {
+                    if (fos != null) {
+                        try {
+                            fos.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }// fin fonction testsifichierexist()
+
+
+
+    private void chercherepetition() {
+        FileInputStream fichierRepetition = null;
+        try {
+            fichierRepetition = openFileInput("Repetition.txt");
+            InputStreamReader isr = new InputStreamReader(fichierRepetition);
+            BufferedReader br = new BufferedReader(isr);
+            StringBuilder sb = new StringBuilder();
+            String ligne;
+            int i = 1;
+            while ((ligne = br.readLine()) != null) {
+                sb.append(ligne).append("\n");
+                Log.i("DEBUG", "Fichier Repetition, ligne =" + ligne);
+                i = 0;
+                //String positionStr="";
+                int position=0;
+                while (ligne.charAt(i) != ',') i++;
+                //Log.i("DEBUG","Position repetition lue:"+ligne.substring(0,i));
+                position=Integer.valueOf(ligne.substring(0,i));
+                if (position-getTodayDatePosition()<0)
+                    Log.i("DEBUG","IL FAUT REPETER L'OPERATION"+ligne);
+
+
+
+
+
+
+
+            }
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } finally {
+            if (fichierRepetition != null) {
+                try {
+                    fichierRepetition.close();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            } else {
+                Log.i("DEBUG", "Gestion de fichier: Impossible de charger le fichier REPETITION");
+            }
+        }
+        return;
         // Il faut charger toutes les repetitions
         // calculer la date de répetitions.
         //comparer avec la date actuelle
         // si depassée il faut proposer de l'ajouter sinon on recalcule la prochaine.
-        // TODO Dois rechercher si repetition à faire
+        //  Dois rechercher si repetition à faire
     }
-    private String premierfichier(){
+
+    private int getTodayDatePosition() {
+        Calendar cal = Calendar.getInstance();
+        int year= cal.get(Calendar.YEAR);
+        int month= cal.get(Calendar.MONTH);
+        month=month+1;
+        int day= cal.get(Calendar.DAY_OF_MONTH);
+        return calculpositiondate(day,month,year);
+    } // fin de getTodeyDatePosition()
+
+
+    private String premierfichier() {
         FileInputStream fis = null;
-        String ligne1="";
+        String ligne1 = "";
 
         try {
             fis = openFileInput("Liste.txt");
@@ -594,20 +702,17 @@ public class MainActivity extends AppCompatActivity {
             BufferedReader br = new BufferedReader(isr);
             StringBuilder sb = new StringBuilder();
             String ligne;
-            int i=1;
+            int i = 1;
             while ((ligne = br.readLine()) != null) {
                 sb.append(ligne).append("\n");
                 //Log.i("DEBUG","Ligne="+ligne);
-                if (i==1) ligne1=ligne; // doit decode la ligne complète !
+                if (i == 1) ligne1 = ligne; // doit decode la ligne complète !
                 i++;
-
             }
-        } catch (
-                FileNotFoundException e) {
+        } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
 
-        } catch (
-                IOException e) {
+        } catch (IOException e) {
             throw new RuntimeException(e);
         } finally {
             if (fis != null) {
@@ -619,9 +724,13 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 Log.i("DEBUG", "Gestion de fichier: Impossible de charger le fichier");
             }
+            return ligne1;
         }
-        return ligne1;
-    }
+    } // fin fonction premierfichier()
 
-}
+
+
+}// fin de la class Main Activity
+
+
 

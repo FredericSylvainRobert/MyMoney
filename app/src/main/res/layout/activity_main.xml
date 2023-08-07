@@ -69,13 +69,24 @@
         android:textSize="25dp" />
 
     <ImageButton
-        android:id="@+id/imageButton"
+    android:id="@+id/imageButton"
+    android:layout_width="133dp"
+    android:layout_height="131dp"
+    android:layout_above="@+id/txtSolde"
+    android:layout_marginBottom="0dp"
+    android:background="@color/white"
+    app:srcCompat="@drawable/plus" />
+
+    <ImageButton
+        android:id="@+id/virementButton"
         android:layout_width="133dp"
-        android:layout_height="131dp"
+        android:layout_height="wrap_content"
         android:layout_above="@+id/txtSolde"
-        android:layout_marginBottom="0dp"
+        android:layout_marginStart="0dp"
+        android:layout_marginBottom="11dp"
+        android:layout_toEndOf="@+id/imageButton2"
         android:background="@color/white"
-        app:srcCompat="@drawable/plus" />
+        app:srcCompat="@drawable/virement" />
 
 
     <ScrollView
