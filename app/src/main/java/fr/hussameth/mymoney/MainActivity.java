@@ -4,8 +4,10 @@ import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,6 +24,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -440,9 +443,7 @@ public class MainActivity extends AppCompatActivity {
         boolean ajoute = false;
         if (j != 0)
             while (i < j) {
-                //("DEBUG","i="+i+"j="+j+"position cherchée=" + position+"/livredecompteposition="+livredecompte.get(i).getPosition());
                 if (position < livredecompte.get(i).getPosition()) {
-                    //Log.i("DEBUG","Trouvé i="+i);
                     livredecompte.add(i, op);
                     ajoute = true;
                     i = j - 1;
@@ -451,10 +452,6 @@ public class MainActivity extends AppCompatActivity {
             }
         if (j == 0) livredecompte.add(op);
         if (ajoute == false && j != 0) livredecompte.add(op); // on ajoute à la fin
-        //Log.i("DEBUG","Ajout à la fin");
-        //afficheHistoriqueCompte();
-
-
     }
 
     private int calculpositiondate(int jour, int mois, int annee) {
@@ -636,50 +633,57 @@ public class MainActivity extends AppCompatActivity {
             int typop;
             int i=0;
             int j=0;
+            int jour=1;
+            int mois=1;
+            int annee=2000;
+            int prochaineposition=0;
             float mont=0;
+
             while ((ligne = br.readLine()) != null) {
                 sb.append(ligne).append("\n");
                 i = 0;
                 int position=0;
                 while (ligne.charAt(i) != ',') i++;
                 position=Integer.valueOf(ligne.substring(0,i));
-                if (position-getTodayDatePosition()<0) {
-                    Log.i("DEBUG","IL FAUT REPETER L'OPERATION"+position+"/"+ligne);
-                    i++;j=i;
-                    while(ligne.charAt(i)!=',') i++;
-                    nomducompte=ligne.substring(j,i);
-                    Log.i("DEBUG","Nomdu compte répétition"+nomducompte);
-                    i++;j=i;
-                    while(ligne.charAt(i)!=',') i++;
-                    benef=ligne.substring(j,i);
-                    Log.i("DEBUG","Beneficiaire répétition"+benef);
-                    typop=Integer.valueOf(ligne.substring(i+1,i+2));
-                    i=i+2;
-                    j=i;
-                    i=i+2;
-                    Log.i("DEBUG","Type operation répétition"+typop);
-                    while(ligne.charAt(i)!=',') i++;
-                    mont=Float.valueOf(ligne.substring(j+1,i));
-                    Log.i("DEBUG","montant répétition"+mont);
-
-                    i++;j=i;
-                    while(ligne.charAt(i)!=',') i++;
-                    Log.i("DEBUG","repetition répétition"+ligne.substring(j,i));
-
-
-
-
-                    // on decode le reste de la ligne.
-
+                i++;j=i;
+                while(ligne.charAt(i)!=',') i++;
+                nomducompte=ligne.substring(j,i);
+                i++;j=i;
+                while(ligne.charAt(i)!=',') i++;
+                benef=ligne.substring(j,i);
+                typop=Integer.valueOf(ligne.substring(i+1,i+2));
+                i=i+2;
+                j=i;
+                i=i+2;
+                while(ligne.charAt(i)!=',') i++;
+                mont=Float.valueOf(ligne.substring(j+1,i));
+                i++;j=i;
+                while(ligne.charAt(i)!=',') i++;
+                repet=ligne.substring(j,i);
+                i++;
+                while (ligne.charAt(i)!=',') i++;
+                jour=Integer.valueOf(ligne.substring(j+2,i));
+                j=i;i++;
+                while (ligne.charAt(i)!=',') i++;
+                mois=Integer.valueOf(ligne.substring(j+1,i));
+                i++;j=i;
+                while (ligne.charAt(i)!='*') i++;
+                annee=Integer.valueOf(ligne.substring(j,i));
+                Operation op=new Operation(nomducompte,benef,typop,mont,Integer.valueOf(repet),jour,mois,annee,calculpositiondate(jour,mois,annee));
+                op.afficheLog();
+                if (op.getFrequence()==10)
+                {
+                    prochaineposition=op.getPosition()+nombrejourdansmois(op.getMois());
+                }
+                if (op.getFrequence()==20)
+                {
+                    prochaineposition=op.getPosition()+nombrejourdansmois(op.getMois());
                 }
 
-
-
-
-
-
-
+                if (getTodayDatePosition()>prochaineposition) demandeajouteautomatique( op );
+                repetition.add(op);
             }
+
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {
@@ -748,6 +752,48 @@ public class MainActivity extends AppCompatActivity {
             return ligne1;
         }
     } // fin fonction premierfichier()
+
+
+    private int nombrejourdansmois(int mois){
+
+        if (mois==1) return 31;
+        if (mois==3) return 31;
+        if (mois==5) return 31;
+        if (mois==7) return 31;
+        if (mois==9) return 31;
+        if (mois==11) return 31;
+        if (mois==2) return 28;
+        return 30;
+
+    }
+
+    void demandeajouteautomatique(Operation op){
+        AlertDialog.Builder demandeAjoutOperationAutomatique = new AlertDialog.Builder(MainActivity.this);
+        demandeAjoutOperationAutomatique.setTitle("Voulez vous ajouter cette opération ?");
+        demandeAjoutOperationAutomatique.setMessage(op.afficheOperationString());
+        demandeAjoutOperationAutomatique.setPositiveButton("Oui", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Toast.makeText( MainActivity.this, "Vous avez Validé" , Toast.LENGTH_SHORT ).show();
+            }
+        });
+        demandeAjoutOperationAutomatique.setNegativeButton("Non", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Toast.makeText( MainActivity.this, "Vous avez Refusé" , Toast.LENGTH_SHORT ).show();
+            }
+        });
+        demandeAjoutOperationAutomatique.setNeutralButton("Supprimer", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Toast.makeText( MainActivity.this, "Vous avez supprimé la répétition" , Toast.LENGTH_SHORT ).show();
+            }
+        });
+
+        demandeAjoutOperationAutomatique.show();
+
+        Log.i("DEBUG","il faut ajouter cette operation" + op.afficheOperationString());
+    }
 
 
 
