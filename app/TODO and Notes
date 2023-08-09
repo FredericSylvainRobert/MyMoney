@@ -1,15 +1,11 @@
 //////////////////////////////////////////////////////////////*
     //                  TODO a faire ou en cours !
-    //
-    // BUG ajoute ou retrait, l'operation s'annule automatiquement!!
-    //
-    //
-    //
-    // TODO pouvoir modifier une ligne .
-    // TODO Adapter la couleur du texte dans historique du compte en fonction debit/crédit/virement
-    // TODO Creer la page virement
-    // TODO Mettre dans l'ordre chronologique l'historique de compte position/Beneficiaire/montant
-    // TODO gerer la repetition des operations
+    // 1 TODO gerer la repetition des operations Reste à décode la date et calculer si repète ou pas.
+    // 2 TODO pouvoir modifier une ligne .
+    // 3 TODO Adapter la couleur du texte dans historique du compte en fonction debit/crédit/virement
+    // 4 TODO Creer la page virement
+    // 5 TODO Mettre dans l'ordre chronologique l'historique de compte position/Beneficiaire/montant
+    // 6
 //////////////////////////////////////////////////////////////
 
 

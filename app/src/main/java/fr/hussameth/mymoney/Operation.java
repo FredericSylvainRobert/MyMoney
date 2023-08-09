@@ -30,7 +30,7 @@ public class Operation  {
         Log.i("DEBUG","Compte:"+ nomCompte + "Type opé="+typeOperation+" ,Beneficaire:" + benef + ", Montant :" + mont + " ,Fréquence:" + freq +" ,Jour="+ jour+"/"+Mois+"/"+Annee+"position="+position);
     }
     public void afficheLog(){
-        Log.i("DEBUG","afficheLog : Compte:"+position+ nomDuCompte + " ,Beneficaire:" + beneficiaire + ", Montant :" + montant + " ,Fréquence:" + frequence +" ,Jour="+ jour+"/"+mois+"/"+annee+"position="+position);
+        Log.i("DEBUG","afficheLog : Compte:"+position+","+nomDuCompte + " ,Beneficaire:" + beneficiaire + ", Montant :" + montant + " ,Fréquence:" + frequence +" ,Jour="+ jour+"/"+mois+"/"+annee+"position="+position);
     }
     public String afficheOperationString(){
         String signe="";

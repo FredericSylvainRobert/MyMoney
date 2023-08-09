@@ -170,11 +170,12 @@
 
     <Button
         android:id="@+id/buttonValide"
-        android:background="@color/white"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/lblMontant"
         android:layout_marginTop="60dp"
+        android:background="@color/white"
+        android:onClick="onClick"
         android:text="Valide" />
 
     <Button
@@ -193,8 +194,8 @@
         android:layout_width="78dp"
         android:layout_height="34dp"
         android:layout_above="@+id/txtSolde"
-        android:layout_marginStart="44dp"
-        android:layout_marginBottom="24dp"
+        android:layout_marginStart="-268dp"
+        android:layout_marginBottom="-117dp"
         android:layout_toEndOf="@+id/buttonAnnule"
         android:text="Type OP"
         android:textColor="@color/white" />

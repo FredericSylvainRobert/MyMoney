@@ -66,10 +66,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         Log.i("DEBUG", "onResume Called");
-        for (Operation operation : livredecompte) {
-            operation.afficheLog();
-            Log.i("DEBUG", "NomduCompte=" + operation.getNomDuCompte());
-        }
+        //for (Operation operation : livredecompte) {
+            //operation.afficheLog();
+            //Log.i("DEBUG", "NomduCompte=" + operation.getNomDuCompte());
+        //}
         //historiqueCompte.setText("onResume");
         historiqueCompte.setText("");
         for (Operation operation : livredecompte)
@@ -135,19 +135,18 @@ public class MainActivity extends AppCompatActivity {
                         public void onActivityResult(ActivityResult activityResult) {
                             int result = activityResult.getResultCode();
                             Intent data = activityResult.getData();
-                            Log.i("DEBUG","Result="+result);
+                            //Log.i("DEBUG","Result="+result+"Result ok="+RESULT_OK);
                             if (result == RESULT_OK) {
                                 String donneeRetour;
                                 String montantString;
                                 String benef;
-                                String frequence;
-                                int typop;
+                                String frequence="0";
+                                int typop=0;
                                 montantString = data.getStringExtra(MESSAGE_MONTANT);
                                 benef = data.getStringExtra(MESSAGE_BENEFICIAIRE);
                                 donneeRetour = data.getStringExtra(MESSAGE_DATE);
                                 typop = Integer.parseInt(data.getStringExtra("TYPE OPERATION"));
                                 frequence = data.getStringExtra("frequence");
-                                //("DEBUG","Retour frequence"+frequence);
                                 int jour;
                                 int mois;
                                 int annee;
@@ -164,22 +163,14 @@ public class MainActivity extends AppCompatActivity {
                                 annee = Integer.parseInt((donneeRetour.substring(i, donneeRetour.length())));
                                 int posi = 0;
                                 posi = calculpositiondate(jour, mois, annee);
-                                if (frequence.equals("Tous les mois")) frequence = "10";
-                                if (frequence.equals("Tous les 2 mois")) frequence = "20";
-                                if (frequence.equals("une seul fois")) frequence = "0";
-                                Log.i("DEBUG", "frequence dans mainactivity" + frequence);
+
                                 Operation operationajout = new Operation(nomDuCompte.getText().toString(), benef, typop, Float.valueOf(montantString),
                                         Integer.valueOf(frequence), jour, mois, annee, posi);
                                 nomDuCompte.setText(operationajout.getNomDuCompte());
-                                //operationajout.afficheLog();
                                 ajouteLigneDeCompte(operationajout.SauveOperationString());
-                                historiqueCompte.append("On est passé là");
-                                //Log.i("DEBUG","activity result: nombre de ligne="+livredecompte.size());
                                 saveLivredeCompte();
                                 afficheHistoriqueCompte();
-
-
-                                //Toast.makeText(MainActivity.this, "Solde mis à jour", Toast.LENGTH_LONG).show();
+                                Toast.makeText(MainActivity.this, "Solde mis à jour", Toast.LENGTH_LONG).show();
                             } else {
                                 Toast.makeText(MainActivity.this, "Opération annulée", Toast.LENGTH_LONG).show();
                             }
@@ -349,7 +340,7 @@ public class MainActivity extends AppCompatActivity {
         int k = 0;
         soldeNum = 0;
         for (k = 0; k < livredecompte.size(); k++) {
-            livredecompte.get(k).afficheLog();
+            //livredecompte.get(k).afficheLog();
             if (livredecompte.get(k).getTypeOperation() == 0)
                 soldeNum -= livredecompte.get(k).getMontant();
             if (livredecompte.get(k).getTypeOperation() == 1)
@@ -608,7 +599,7 @@ public class MainActivity extends AppCompatActivity {
                 FileOutputStream fos = null;
                 try {
                     fos = openFileOutput("Repetition.txt", MODE_PRIVATE);
-                    fos.write("730032,Default,Création,1,0.0,0,1,1,2000*\n".getBytes());
+                    fos.write("730032,Default,Création,1,4.0,0,2,3,2000*\n".getBytes());
                 } catch (FileNotFoundException e) {
                     throw new RuntimeException(e);
                 } catch (IOException e) {
@@ -639,18 +630,48 @@ public class MainActivity extends AppCompatActivity {
             BufferedReader br = new BufferedReader(isr);
             StringBuilder sb = new StringBuilder();
             String ligne;
-            int i = 1;
+            String nomducompte="";
+            String benef="";
+            String repet="";
+            int typop;
+            int i=0;
+            int j=0;
+            float mont=0;
             while ((ligne = br.readLine()) != null) {
                 sb.append(ligne).append("\n");
-                Log.i("DEBUG", "Fichier Repetition, ligne =" + ligne);
                 i = 0;
-                //String positionStr="";
                 int position=0;
                 while (ligne.charAt(i) != ',') i++;
-                //Log.i("DEBUG","Position repetition lue:"+ligne.substring(0,i));
                 position=Integer.valueOf(ligne.substring(0,i));
-                if (position-getTodayDatePosition()<0)
-                    Log.i("DEBUG","IL FAUT REPETER L'OPERATION"+ligne);
+                if (position-getTodayDatePosition()<0) {
+                    Log.i("DEBUG","IL FAUT REPETER L'OPERATION"+position+"/"+ligne);
+                    i++;j=i;
+                    while(ligne.charAt(i)!=',') i++;
+                    nomducompte=ligne.substring(j,i);
+                    Log.i("DEBUG","Nomdu compte répétition"+nomducompte);
+                    i++;j=i;
+                    while(ligne.charAt(i)!=',') i++;
+                    benef=ligne.substring(j,i);
+                    Log.i("DEBUG","Beneficiaire répétition"+benef);
+                    typop=Integer.valueOf(ligne.substring(i+1,i+2));
+                    i=i+2;
+                    j=i;
+                    i=i+2;
+                    Log.i("DEBUG","Type operation répétition"+typop);
+                    while(ligne.charAt(i)!=',') i++;
+                    mont=Float.valueOf(ligne.substring(j+1,i));
+                    Log.i("DEBUG","montant répétition"+mont);
+
+                    i++;j=i;
+                    while(ligne.charAt(i)!=',') i++;
+                    Log.i("DEBUG","repetition répétition"+ligne.substring(j,i));
+
+
+
+
+                    // on decode le reste de la ligne.
+
+                }
 
 
 

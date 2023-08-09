@@ -33,6 +33,8 @@ public class AjouteOperation extends AppCompatActivity {
 
     private DatePickerDialog datePickerDialog;
     private Button dateButton;
+    private String frequenceStr="0";
+
     RadioGroup groupeBoutton;
     RadioButton boutton;
     RadioButton boutton1;
@@ -54,8 +56,8 @@ public class AjouteOperation extends AppCompatActivity {
         beneficiaire=(EditText) findViewById(R.id.lblBeneficiaire);
         montant=(EditText) findViewById(R.id.lblMontant);
         solde=(TextView) findViewById(R.id.lblSolde);
-        typop=(TextView) findViewById(R.id.typeOP);
-        labelNomDuCompte=(TextView) findViewById(R.id.lblNomCompteAjoute);
+        typop=findViewById(R.id.typeOP);
+        labelNomDuCompte=findViewById(R.id.lblNomCompteAjoute);
         initDatePicker();
         dateButton=findViewById(R.id.datePickerButton);
         dateButton.setOnClickListener(dateButtonListener);
@@ -78,10 +80,10 @@ public class AjouteOperation extends AppCompatActivity {
         labelNomDuCompte.setText(nomDuCompte);
         solde.setText(this.getIntent().getExtras().getString("Solde"));
         typop.setText(this.getIntent().getExtras().getString("Type op"));
-
         //Log.i("DEBUG","Type op="+typop.getText().toString()+".");
         int typ=0;
         typ=Integer.parseInt(typop.getText().toString());
+
         //Log.i("DEBUG","Valeur de typ="+typ+".");
         //if (typ==1) Log.i("DEBUG","ON a un CREDIT");
         //if (typ==0) Log.i("DEBUG","ON a un DEBIT");
@@ -115,13 +117,13 @@ public class AjouteOperation extends AppCompatActivity {
     private View.OnClickListener boutonValideListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
+            Log.i("DEBUG","onClick cliqué");
             Intent data = new Intent();
             data.putExtra("Montant", montant.getText().toString());
             data.putExtra("Beneficiaire", beneficiaire.getText().toString());
             data.putExtra("Date",date.getText().toString());
             data.putExtra("TYPE OPERATION",typop.getText().toString());
-            data.putExtra("frequence",boutton.getText().toString());
-
+            data.putExtra("frequence",frequenceStr);
             // 0 pas de répétition, 10 tous les mois , 20 tous les 2 mois, 30 toutes les semaines (jour fixe)
             setResult(RESULT_OK, data); // Tout est ok, on peut envoyer
             finish();
@@ -155,20 +157,17 @@ public class AjouteOperation extends AppCompatActivity {
     return day + "/" + month + "/" + year;
     }
     public void checkbutton(View v){
-        String reponse="";
+
         int bouttonRadioId= groupeBoutton.getCheckedRadioButtonId();
         boutton=findViewById(bouttonRadioId);
-        reponse=boutton.getText().toString();
-        Log.i("DEBUG","Reponse frequence="+reponse);
+        if (boutton.getText().equals("une seul fois")) frequenceStr="0";
+        if (boutton.getText().equals("Tous les mois")) frequenceStr="10";
+        if (boutton.getText().equals("Tous les 2 mois")) frequenceStr="20";
+        if (boutton.getText().equals("Toutes les semaines")) frequenceStr="30";
+
         // 0 pas de répétition, 10 tous les mois , 20 tous les 2 mois, 30 toutes les semaines (jour fixe)
 
-        //boutton1.setText(nom1);
-        //boutton2.setText(nom2);
-        //boutton3.setText(nom3);
 
-        //boutton=findViewById(bouttonRadioId);
-        //boutton.setText(nomDuCompte.getText());
-        //Log.i("DEBUG","BouttonID"+bouttonRadioId);
     }
 
 
