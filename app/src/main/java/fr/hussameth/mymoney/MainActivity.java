@@ -9,7 +9,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.BackgroundColorSpan;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -69,11 +73,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         Log.i("DEBUG", "onResume Called");
-        //for (Operation operation : livredecompte) {
-            //operation.afficheLog();
-            //Log.i("DEBUG", "NomduCompte=" + operation.getNomDuCompte());
-        //}
-        //historiqueCompte.setText("onResume");
         historiqueCompte.setText("");
         for (Operation operation : livredecompte)
             historiqueCompte.append(operation.afficheOperationString());
@@ -329,21 +328,18 @@ public class MainActivity extends AppCompatActivity {
 
     private void afficheHistoriqueCompte()  // Rempli historiqueCompte par livredecompte
     {
-        String longTexte = "";
+        Log.i("DEBUG","Fonction afficheHistorueCompte");
+        String text="Texte à afficher";
+        SpannableString lontTexte = new SpannableString(text);
+        BackgroundColorSpan fondjaune=new BackgroundColorSpan(Color.YELLOW);
+        BackgroundColorSpan fondvert=new BackgroundColorSpan(Color.GREEN);
         int i = 0;
-        //Log.i("DEBUG","afficheHistoriqueCompte:livredecompte size="+livredecompte.size());
-        //for(i=0;i<livredecompte.size();i++)
-        //    longTexte=longTexte+livredecompte.get(i).afficheOperationString();
-        //Log.i("DEBUG","Affiche historqiue compte long texte="+longTexte);
-        historiqueCompte.setText("");
-
-        //historiqueCompte.setText("Efface tout!");
+        historiqueCompte.setText(lontTexte);
         for (Operation operation : livredecompte)
             historiqueCompte.append(operation.afficheOperationString());
-        int k = 0;
+       int k = 0;
         soldeNum = 0;
         for (k = 0; k < livredecompte.size(); k++) {
-            //livredecompte.get(k).afficheLog();
             if (livredecompte.get(k).getTypeOperation() == 0)
                 soldeNum -= livredecompte.get(k).getMontant();
             if (livredecompte.get(k).getTypeOperation() == 1)
@@ -351,14 +347,13 @@ public class MainActivity extends AppCompatActivity {
             if (livredecompte.get(k).getTypeOperation() == 2)
                 soldeNum -= livredecompte.get(k).getMontant();
             soldeNum = Math.round(soldeNum * 100);
-            //Log.i("DEBUG","SoldeNum*100="+soldeNum);
             soldeNum = soldeNum / 100;
-            //Log.i("DEBUG","SoldeNum="+soldeNum);
         }
         solde.setText(String.valueOf(soldeNum));
     }
 
     private void init() {
+        Log.i("DEBUG","Fonction Init");
         // On charge le fichier Historique.TXT
         soldeNum = Float.valueOf("0.00");
         typeOperation = 0; // par defaut debit
@@ -369,14 +364,14 @@ public class MainActivity extends AppCompatActivity {
         loadLivredecompte(premierfichier());
         afficheHistoriqueCompte();
         Log.i("DEBUG", "Avant chercherepetion");
-        chercherepetition();
+        //chercherepetition();
         nomDuCompte.setText(livredecompte.get(0).getNomDuCompte());
         //Log.i("DEBUG","Passage par la fonction Init()");
 
     }
 
     public void ajouteLigneDeCompte(String ligne) // on ajoute la ligne de compte à ArrayList<Operation> livredecompte
-    {
+    {   Log.i("DEBUG","Fonction ajouteLigneDeCompte");
         int position = 0;
         int typeOperation = 0;
         String jour = "01";
@@ -394,50 +389,54 @@ public class MainActivity extends AppCompatActivity {
         Operation operation = new Operation(NomCompte, beneficiaire, typeOperation, montantFloat, freqInt, jourInt, moisInt, anneeInt, calculpositiondate(jourInt, moisInt, anneeInt));
         int i = 0;
         int k = 0;
-        while (ligne.charAt(i) != ',') i++;
+        while (ligne.charAt(i) != ',') i++; //// Lecture de la position
         operation.setPosition(Integer.parseInt(ligne.substring(0, i)));
         i++;
         k = i;
-        while (ligne.charAt(i) != ',') i++;
+        while (ligne.charAt(i) != ',') i++;   /// Lecture du nomducompte
         operation.setNomDuCompte(ligne.substring(k, i));
         i++;
         k = i;
-        while (ligne.charAt(i) != ',') i++;
+        while (ligne.charAt(i) != ',') i++;   //// Lecture du beneficiaire
         operation.setBenef(ligne.substring(k, i));
         i++;
         k = i;
-        while (ligne.charAt(i) != ',') i++;
+        while (ligne.charAt(i) != ',') i++;   //// lecture du type opération  // 0=débit '-' ,1= crédit  '+' , 2 virement benef '>'  => nom compte=benef
         operation.setTypeOperation(Integer.parseInt(ligne.substring(k, i)));
         i++;
         k = i;
-        while (ligne.charAt(i) != ',') i++;
+        while (ligne.charAt(i) != ',') i++;     //// lecture du montant en float
         operation.setMontant(Float.parseFloat(ligne.substring(k, i)));
         i++;
         k = i;
-        /*if (operation.getTypeOperation() == 0) soldeNum = soldeNum - operation.getMontant();
-        if (operation.getTypeOperation() == 1) soldeNum = soldeNum + operation.getMontant();
-        if (operation.getTypeOperation() == 2) soldeNum = soldeNum - operation.getMontant();
-        solde.setText(String.valueOf(soldeNum));*/
-        //Log.i("DEBUG","AjouteLigneDeCompte : Solde : "+solde.getText().toString()+"Operation n°:"+livredecompte.size());
-        while (ligne.charAt(i) != ',') i++;
-        operation.setFrequence(Integer.parseInt(ligne.substring(k, i)));
+        while (ligne.charAt(i) != ',') i++;    /// lecture de la fréquence // 0 pas de répétition, 10 tous les mois , 20 tous les 2 mois, 30 toutes les semaines (jour fixe)
+        operation.setFrequence(Integer.parseInt(ligne.substring(k, i)));  // 1 lundi , 2 mardi , 3 mercredi , 4 jeudi , 5 vendredi , 6 samedi , 7 dimanche
         i++;
         k = i;
-        while (ligne.charAt(i) != ',') i++;
+        while (ligne.charAt(i) != ',') i++;    //// lecture du jour
         operation.setJour(Integer.parseInt(ligne.substring(k, i)));
         i++;
         k = i;
-        while (ligne.charAt(i) != ',') i++;
+        while (ligne.charAt(i) != ',') i++;   //// lecture du mois
         operation.setMois(Integer.parseInt(ligne.substring(k, i)));
         i++;
-        k = i;
+        k = i;                                 /// lecture de l'annee
         operation.setAnnee(Integer.parseInt(ligne.substring(k, i + 4)));
         i++;
         k = i;
+
+        ///////////////////////////////////
+        //              TODO ici on bascule la répétion de frequence !!
+        //              TODO fonction chercherepetition
+        //          Si frequence = 0 , pas de soucis, on continue, si frequence >0 = Repetition à traiter.
+        ///////////////////////////////////
+        if (operation.getFrequence()!=0) chercherepetition(operation);
+
         rangeParDate(operation, calculpositiondate(operation.getJour(), operation.getMois(), operation.getAnnee()));
     }
 
     private void rangeParDate(Operation op, int position) {
+        op.afficheLog();
         int i = 0;
         int j = livredecompte.size();
         boolean ajoute = false;
@@ -458,19 +457,18 @@ public class MainActivity extends AppCompatActivity {
         int position = 1;
         position = jour + mois * 31 + annee * 365;
         return position;
-
     }
 
     private void saveLivredeCompte() {
-        //String historique = historiqueCompte.getText().toString();
+        Log.i("DEBUG","saveLivredeCompte");
         FileOutputStream fos = null;
         nomDuFichier = livredecompte.get(0).getNomDuCompte();
-        //Log.i("DEBUG","Nom du ficheir a écrire:"+nomDuFichier);
+
         try {
             fos = openFileOutput(nomDuFichier + EXTENSION, MODE_PRIVATE);
             for (Operation operation : livredecompte)
                 fos.write(operation.SauveOperationString().getBytes());
-            //historiqueCompte.setText("");
+
             Toast.makeText(this, "Saved : " + getFilesDir() + "/" + livredecompte.get(0).getNomDuCompte(), Toast.LENGTH_LONG).show();
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
@@ -489,7 +487,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loadLivredecompte(String fichier) {
-        //("DEBUG","loadLivredecompte:"+fichier);
+
         FileInputStream fis = null;
         try {
             fis = openFileInput(fichier + EXTENSION);
@@ -619,87 +617,13 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    private void chercherepetition() {
-        FileInputStream fichierRepetition = null;
-        try {
-            fichierRepetition = openFileInput("Repetition.txt");
-            InputStreamReader isr = new InputStreamReader(fichierRepetition);
-            BufferedReader br = new BufferedReader(isr);
-            StringBuilder sb = new StringBuilder();
-            String ligne;
-            String nomducompte="";
-            String benef="";
-            String repet="";
-            int typop;
-            int i=0;
-            int j=0;
-            int jour=1;
-            int mois=1;
-            int annee=2000;
-            int prochaineposition=0;
-            float mont=0;
+    private void chercherepetition(Operation operation) {
 
-            while ((ligne = br.readLine()) != null) {
-                sb.append(ligne).append("\n");
-                i = 0;
-                int position=0;
-                while (ligne.charAt(i) != ',') i++;
-                position=Integer.valueOf(ligne.substring(0,i));
-                i++;j=i;
-                while(ligne.charAt(i)!=',') i++;
-                nomducompte=ligne.substring(j,i);
-                i++;j=i;
-                while(ligne.charAt(i)!=',') i++;
-                benef=ligne.substring(j,i);
-                typop=Integer.valueOf(ligne.substring(i+1,i+2));
-                i=i+2;
-                j=i;
-                i=i+2;
-                while(ligne.charAt(i)!=',') i++;
-                mont=Float.valueOf(ligne.substring(j+1,i));
-                i++;j=i;
-                while(ligne.charAt(i)!=',') i++;
-                repet=ligne.substring(j,i);
-                i++;
-                while (ligne.charAt(i)!=',') i++;
-                jour=Integer.valueOf(ligne.substring(j+2,i));
-                j=i;i++;
-                while (ligne.charAt(i)!=',') i++;
-                mois=Integer.valueOf(ligne.substring(j+1,i));
-                i++;j=i;
-                while (ligne.charAt(i)!='*') i++;
-                annee=Integer.valueOf(ligne.substring(j,i));
-                Operation op=new Operation(nomducompte,benef,typop,mont,Integer.valueOf(repet),jour,mois,annee,calculpositiondate(jour,mois,annee));
-                op.afficheLog();
-                if (op.getFrequence()==10)
-                {
-                    prochaineposition=op.getPosition()+nombrejourdansmois(op.getMois());
-                }
-                if (op.getFrequence()==20)
-                {
-                    prochaineposition=op.getPosition()+nombrejourdansmois(op.getMois());
-                }
-
-                if (getTodayDatePosition()>prochaineposition) demandeajouteautomatique( op );
-                repetition.add(op);
+            if(getTodayDatePosition()>operation.getPosition()) {
+                Log.i("DEBUG","Postion aujourd'hui="+getTodayDatePosition()+"position de l'opération"+operation.getPosition());
+                demandeajouteautomatique(operation);
             }
 
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } finally {
-            if (fichierRepetition != null) {
-                try {
-                    fichierRepetition.close();
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            } else {
-                Log.i("DEBUG", "Gestion de fichier: Impossible de charger le fichier REPETITION");
-            }
-        }
-        return;
         // Il faut charger toutes les repetitions
         // calculer la date de répetitions.
         //comparer avec la date actuelle
@@ -754,18 +678,7 @@ public class MainActivity extends AppCompatActivity {
     } // fin fonction premierfichier()
 
 
-    private int nombrejourdansmois(int mois){
 
-        if (mois==1) return 31;
-        if (mois==3) return 31;
-        if (mois==5) return 31;
-        if (mois==7) return 31;
-        if (mois==9) return 31;
-        if (mois==11) return 31;
-        if (mois==2) return 28;
-        return 30;
-
-    }
 
     void demandeajouteautomatique(Operation op){
         AlertDialog.Builder demandeAjoutOperationAutomatique = new AlertDialog.Builder(MainActivity.this);
@@ -774,6 +687,18 @@ public class MainActivity extends AppCompatActivity {
         demandeAjoutOperationAutomatique.setPositiveButton("Oui", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+                if(op.getFrequence()==10){
+                    op.setFrequence(0);
+                    Log.i("DEBUG","Première ligne repetition sans frequance:");
+                    op.afficheLog();
+                    rangeParDate(op,op.getPosition());
+                    op.setFrequence(10);
+                    op.ajouteunmois();
+                    Log.i("DEBUG","deuxième ligne repetition avec frequence plus tard:");
+
+                    //rangeParDate(op,op.getPosition());
+                }
+
                 Toast.makeText( MainActivity.this, "Vous avez Validé" , Toast.LENGTH_SHORT ).show();
             }
         });
@@ -789,9 +714,7 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText( MainActivity.this, "Vous avez supprimé la répétition" , Toast.LENGTH_SHORT ).show();
             }
         });
-
         demandeAjoutOperationAutomatique.show();
-
         Log.i("DEBUG","il faut ajouter cette operation" + op.afficheOperationString());
     }
 

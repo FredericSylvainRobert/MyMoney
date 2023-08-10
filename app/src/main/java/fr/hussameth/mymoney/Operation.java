@@ -37,7 +37,7 @@ public class Operation  {
         if (typeOperation==0) signe="-";
         if (typeOperation==1) signe="+";
         if (typeOperation==2) signe=">";
-        return signe+"Le : "+jour+"/"+mois+"/"+annee+" , "+beneficiaire+" , " + montant + " € \n" ;
+        return signe+"/"+jour+"/"+mois+"/"+annee+" , "+beneficiaire+" , " + montant + " € \n" ;
     }
 
     public String SauveOperationString(){
@@ -99,4 +99,23 @@ public class Operation  {
         annee=an;
     }
 
+    public void ajouteunmois(){
+        position+=nombrejourdansmois(mois);
+        mois=mois+1;
+        if (mois>12) { mois=1; annee++; mois=1;}
+
+    }
+
+    private int nombrejourdansmois(int mois){
+
+        if (mois==1) return 31;
+        if (mois==3) return 31;
+        if (mois==5) return 31;
+        if (mois==7) return 31;
+        if (mois==9) return 31;
+        if (mois==11) return 31;
+        if (mois==2) return 29;
+        return 30;
+
+    }
 }
