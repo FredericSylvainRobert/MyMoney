@@ -18,6 +18,16 @@ import java.util.Calendar;
 
 public class AjouteOperation extends AppCompatActivity {
 
+    private static final String FILE_NAME = "Default.txt";
+    public static final String MESSAGE_MONTANT = "Montant";
+    public static final String MESSAGE_BENEFICIAIRE = "Beneficiaire";
+    public static final String MESSAGE_DATE = "Date";                              //CreationCompte
+    public static final String MESSAGE_NOM_DU_COMPTE_NOUVEAU = "NouveauNomDuCompte"; //CreationCompte
+    public static final String MESSAGE_SOLDE = "Solde";//CreationCompte
+    public static final String MESSAGE_TYPEOP = "TypeOperation";
+    public static final String MESSAGE_FREQUENCE = "frequence";
+    public static final String EXTENSION = ".txt";
+
     private Button boutonValide;
     private Button boutonAnnule;
     private EditText date;
@@ -29,11 +39,12 @@ public class AjouteOperation extends AppCompatActivity {
 
 
     private TextView labelNomDuCompte;
-    private TextView typop;
+
 
     private DatePickerDialog datePickerDialog;
     private Button dateButton;
     private String frequenceStr="0";
+    private int typ=0; // 0=debit , 1 = credit
 
     RadioGroup groupeBoutton;
     RadioButton boutton;
@@ -56,7 +67,6 @@ public class AjouteOperation extends AppCompatActivity {
         beneficiaire=(EditText) findViewById(R.id.lblBeneficiaire);
         montant=(EditText) findViewById(R.id.lblMontant);
         solde=(TextView) findViewById(R.id.lblSolde);
-        typop=findViewById(R.id.typeOP);
         labelNomDuCompte=findViewById(R.id.lblNomCompteAjoute);
         initDatePicker();
         dateButton=findViewById(R.id.datePickerButton);
@@ -75,20 +85,12 @@ public class AjouteOperation extends AppCompatActivity {
         // 0=débit '-' ,1= crédit  '+' , 2 virement benef '>'  => nom compte=benef
 
 
-
+        // on recupère le nom du compte, le type d'operation,le solde du compte
         nomDuCompte = this.getIntent().getExtras().getString("nomducompte");
         labelNomDuCompte.setText(nomDuCompte);
-        solde.setText(this.getIntent().getExtras().getString("Solde"));
-        typop.setText(this.getIntent().getExtras().getString("Type op"));
-        //Log.i("DEBUG","Type op="+typop.getText().toString()+".");
-        int typ=0;
-        typ=Integer.parseInt(typop.getText().toString());
+        typ=Integer.parseInt(this.getIntent().getExtras().getString(MESSAGE_TYPEOP));
+        solde.setText(this.getIntent().getExtras().getString(MESSAGE_SOLDE));
 
-        //Log.i("DEBUG","Valeur de typ="+typ+".");
-        //if (typ==1) Log.i("DEBUG","ON a un CREDIT");
-        //if (typ==0) Log.i("DEBUG","ON a un DEBIT");
-        //if (typ==2) Log.i("DEBUG","ON a un VIREMENT");
-        //Log.i("DEBUG","Typop"+typop.getText().toString());
     }
 
     private String getTodayDate() {
@@ -117,13 +119,13 @@ public class AjouteOperation extends AppCompatActivity {
     private View.OnClickListener boutonValideListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            Log.i("DEBUG","onClick cliqué");
+            Log.i("DEBUG","Bouton Valide cliqué");
             Intent data = new Intent();
-            data.putExtra("Montant", montant.getText().toString());
-            data.putExtra("Beneficiaire", beneficiaire.getText().toString());
-            data.putExtra("Date",date.getText().toString());
-            data.putExtra("TYPE OPERATION",typop.getText().toString());
-            data.putExtra("frequence",frequenceStr);
+            data.putExtra(MESSAGE_MONTANT, montant.getText().toString());
+            data.putExtra(MESSAGE_BENEFICIAIRE, beneficiaire.getText().toString());
+            data.putExtra(MESSAGE_DATE,date.getText().toString());
+            data.putExtra(MESSAGE_TYPEOP,String.valueOf(typ));
+            data.putExtra(MESSAGE_FREQUENCE,frequenceStr);
             // 0 pas de répétition, 10 tous les mois , 20 tous les 2 mois, 30 toutes les semaines (jour fixe)
             setResult(RESULT_OK, data); // Tout est ok, on peut envoyer
             finish();

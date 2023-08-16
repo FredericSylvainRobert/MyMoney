@@ -23,6 +23,48 @@ public class Operation  {
         annee=Annee;
         position=Position;
     }
+    public void decode (String ligne){
+        //
+        // decode et
+        //
+        int i = 0;
+        int k = 0;
+        while (ligne.charAt(i) != ',') i++; //// Lecture de la position
+        setPosition(Integer.parseInt(ligne.substring(0, i)));
+        i++;
+        k = i;
+        while (ligne.charAt(i) != ',') i++;   /// Lecture du nomducompte
+        setNomDuCompte(ligne.substring(k, i));
+        i++;
+        k = i;
+        while (ligne.charAt(i) != ',') i++;   //// Lecture du beneficiaire
+        setBenef(ligne.substring(k, i));
+        i++;
+        k = i;
+        while (ligne.charAt(i) != ',') i++;   //// lecture du type opération  // 0=débit '-' ,1= crédit  '+' , 2 virement benef '>'  => nom compte=benef
+        setTypeOperation(Integer.parseInt(ligne.substring(k, i)));
+        i++;
+        k = i;
+        while (ligne.charAt(i) != ',') i++;     //// lecture du montant en float
+        setMontant(Float.parseFloat(ligne.substring(k, i)));
+        i++;
+        k = i;
+        while (ligne.charAt(i) != ',') i++;    /// lecture de la fréquence // 0 pas de répétition, 10 tous les mois , 20 tous les 2 mois, 30 toutes les semaines (jour fixe)
+        setFrequence(Integer.parseInt(ligne.substring(k, i)));  // 1 lundi , 2 mardi , 3 mercredi , 4 jeudi , 5 vendredi , 6 samedi , 7 dimanche
+        i++;
+        k = i;
+        while (ligne.charAt(i) != ',') i++;    //// lecture du jour
+        setJour(Integer.parseInt(ligne.substring(k, i)));
+        i++;
+        k = i;
+        while (ligne.charAt(i) != ',') i++;   //// lecture du mois
+        setMois(Integer.parseInt(ligne.substring(k, i)));
+        i++;
+        k = i;                                 /// lecture de l'annee
+        setAnnee(Integer.parseInt(ligne.substring(k, i + 4)));
+        i++;
+        k = i;
+    }
 
 
 
@@ -37,7 +79,7 @@ public class Operation  {
         if (typeOperation==0) signe="-";
         if (typeOperation==1) signe="+";
         if (typeOperation==2) signe=">";
-        return signe+"/"+jour+"/"+mois+"/"+annee+" , "+beneficiaire+" , " + montant + " € \n" ;
+        return signe+"/"+jour+"/"+mois+"/"+annee+" , "+beneficiaire+" , " + montant + " € "+frequence+" \n" ;
     }
 
     public String SauveOperationString(){
@@ -99,10 +141,10 @@ public class Operation  {
         annee=an;
     }
 
-    public void ajouteunmois(){
+    public void ajoutemois(int nbmois){
         position+=nombrejourdansmois(mois);
-        mois=mois+1;
-        if (mois>12) { mois=1; annee++; mois=1;}
+        mois+=nbmois;
+        if (mois>12) { mois-=12; annee++; }
 
     }
 

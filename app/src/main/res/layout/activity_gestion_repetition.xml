@@ -49,7 +49,19 @@
         android:textAlignment="center"
         android:textColor="@color/black"
         android:textSize="35sp" />
-
+    <TextView
+        android:background="@color/white"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:layout_below="@+id/txtBandeauHaut"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="2dp"
+        android:text="Répétition automatique"
+        android:textColor="@color/Red"
+        android:textSize="30dp"
+        android:textStyle="italic" />
 
 
 
@@ -62,7 +74,7 @@
         android:layout_below="@+id/txtBandeauHaut"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="50dp"
         android:text="Nom du Compte "
         android:textColor="@color/black"
         android:textSize="30dp"
@@ -189,57 +201,9 @@
         android:layout_toEndOf="@+id/buttonValide"
         android:text="Annule" />
 
-    <TextView
-        android:id="@+id/typeOP"
-        android:layout_width="78dp"
-        android:layout_height="34dp"
-        android:layout_above="@+id/txtSolde"
-        android:layout_marginStart="-268dp"
-        android:layout_marginBottom="-117dp"
-        android:layout_toEndOf="@+id/buttonAnnule"
-        android:text="Type OP"
-        android:textColor="@color/Yellow" />
 
-    <RadioGroup
-        android:id="@+id/groupeBouttonFreq"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_below="@+id/txtMontant"
-        android:layout_marginTop="0dp"
-        android:orientation="horizontal">
 
-        <RadioButton
-            android:id="@+id/freq1"
-            android:layout_width="130dp"
-            android:layout_height="50dp"
-            android:checked="true"
-            android:onClick="checkbutton"
-            android:text="une seul fois"
-            android:textAlignment="center"
-            android:textColor="@color/black"
-            android:textSize="15sp" />
 
-        <RadioButton
-            android:id="@+id/freq2"
-            android:layout_width="130dp"
-            android:layout_height="50dp"
-            android:onClick="checkbutton"
-            android:text="Tous les mois"
-            android:textAlignment="center"
-            android:textColor="@color/black"
-            android:textSize="12sp" />
-
-        <RadioButton
-            android:id="@+id/freq3"
-            android:layout_width="130dp"
-            android:layout_height="50dp"
-            android:onClick="checkbutton"
-            android:text="Tous les 2 mois"
-            android:textAlignment="center"
-            android:textColor="@color/black"
-            android:textSize="12sp" />
-
-    </RadioGroup>
 
 
 </RelativeLayout>

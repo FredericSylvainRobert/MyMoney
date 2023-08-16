@@ -36,14 +36,16 @@ public class MainActivity extends AppCompatActivity {
 
     ArrayList<Operation> livredecompte = new ArrayList<>(); //création du livre de 1 compte
     ArrayList<Operation> repetition = new ArrayList<>();
-    //private int nombredeligne; // nombre de ligne dans historique de compte
-    //public Operation operation=new Operation("Caisse Epargne Normandie","Initialisation",1000, LocalDate.of(2000,01,01);
+
+
     private static final String FILE_NAME = "Default.txt";
     public static final String MESSAGE_MONTANT = "Montant";
     public static final String MESSAGE_BENEFICIAIRE = "Beneficiaire";
-    public static final String MESSAGE_DATE = "Date";                              //CreationCompte
-    public static final String MESSAGE_NOM_DU_COMPTE_NOUVEAU = "NouveauNomDuCompte"; //CreationCompte
-    public static final String MESSAGE_SOLDE = "Solde";//CreationCompte
+    public static final String MESSAGE_DATE = "Date";                                   //CreationCompte
+    public static final String MESSAGE_NOM_DU_COMPTE_NOUVEAU = "NouveauNomDuCompte";    //CreationCompte
+    public static final String MESSAGE_SOLDE = "Solde";                                 //CreationCompte
+    public static final String MESSAGE_TYPEOP = "TypeOperation";
+    public static final String MESSAGE_FREQUENCE = "frequence";
     public static final String EXTENSION = ".txt";
     //
     //   les differents types de variable JAVA
@@ -73,15 +75,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         Log.i("DEBUG", "onResume Called");
-        historiqueCompte.setText("");
-        for (Operation operation : livredecompte)
-            historiqueCompte.append(operation.afficheOperationString());
+        afficheHistoriqueCompte();
     }
 
     @Override
     protected void onRestart() {
         super.onRestart();
         Log.i("DEBUG", "onRestart Called");
+        init();
     }
 
     @Override
@@ -93,6 +94,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
+        saveLivredeCompte();
         Log.i("DEBUG", "onStop Called");
     }
 
@@ -147,8 +149,11 @@ public class MainActivity extends AppCompatActivity {
                                 montantString = data.getStringExtra(MESSAGE_MONTANT);
                                 benef = data.getStringExtra(MESSAGE_BENEFICIAIRE);
                                 donneeRetour = data.getStringExtra(MESSAGE_DATE);
-                                typop = Integer.parseInt(data.getStringExtra("TYPE OPERATION"));
-                                frequence = data.getStringExtra("frequence");
+
+                                typop = Integer.parseInt(data.getStringExtra(MESSAGE_TYPEOP));
+
+                                frequence = data.getStringExtra(MESSAGE_FREQUENCE);
+
                                 int jour;
                                 int mois;
                                 int annee;
@@ -169,12 +174,37 @@ public class MainActivity extends AppCompatActivity {
                                 Operation operationajout = new Operation(nomDuCompte.getText().toString(), benef, typop, Float.valueOf(montantString),
                                         Integer.valueOf(frequence), jour, mois, annee, posi);
                                 nomDuCompte.setText(operationajout.getNomDuCompte());
-                                ajouteLigneDeCompte(operationajout.SauveOperationString());
+                                if(operationajout.getFrequence()==0) ajouteLigneDeCompte(operationajout.SauveOperationString());
+                                if(operationajout.getFrequence()!=0) ajoutAutomatiqueOperation(operationajout.SauveOperationString());
                                 saveLivredeCompte();
                                 afficheHistoriqueCompte();
                                 Toast.makeText(MainActivity.this, "Solde mis à jour", Toast.LENGTH_LONG).show();
                             } else {
                                 Toast.makeText(MainActivity.this, "Opération annulée", Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    }
+            );
+
+    ActivityResultLauncher<Intent> activityResultLauncherRepetition =
+            registerForActivityResult(
+                    new ActivityResultContracts.StartActivityForResult(),
+                    new ActivityResultCallback<ActivityResult>() {
+                        @Override
+                        public void onActivityResult(ActivityResult activityResult) {
+                            int result = activityResult.getResultCode();
+                            Intent data = activityResult.getData();
+                            //Log.i("DEBUG","Result="+result+"Result ok="+RESULT_OK);
+                            if (result == RESULT_OK) {
+                                String ligne;
+                                ligne=data.getStringExtra("Validé");
+                                ajoutAutomatiqueOperation(ligne);
+                                Log.i("DEBUG","Retour de le rapatition"+ligne);
+                                //
+                                // TODO Recuperer l'opération à repeter
+                                //
+                            } else {
+                                Toast.makeText(MainActivity.this, "Repetition annulée", Toast.LENGTH_LONG).show();
                             }
                         }
                     }
@@ -288,12 +318,12 @@ public class MainActivity extends AppCompatActivity {
                     MainActivity.this, //On crée le lien entre les deux activités
                     AjouteOperation.class           // la deuxième activité est déclaré comme CLASS
             );
-            ; // Opération de crédit
+            typeOperation = 1; // Opération de crédit
             intent.putExtra("nomducompte", nomDuCompte.getText().toString());
-            intent.putExtra("Solde", solde.getText());
+            intent.putExtra(MESSAGE_SOLDE, solde.getText());
             solde.setText("1");
-            intent.putExtra("Type op", solde.getText());
-            intent.putExtra("TYPE OPERATION", "1");
+            //intent.putExtra("Type op", solde.getText());
+            intent.putExtra(MESSAGE_TYPEOP, String.valueOf(typeOperation));
             activityResultLauncherAjoute.launch(intent);
         }
     };
@@ -306,9 +336,8 @@ public class MainActivity extends AppCompatActivity {
             );
             typeOperation = 0; // Opération de débit
             intent.putExtra("nomducompte", nomDuCompte.getText().toString());
-            intent.putExtra("Solde", solde.getText());
-            solde.setText("0");
-            intent.putExtra("Type op", solde.getText());
+            intent.putExtra(MESSAGE_SOLDE, solde.getText());
+            intent.putExtra(MESSAGE_TYPEOP, String.valueOf(typeOperation));
             activityResultLauncherAjoute.launch(intent);
         }
     };
@@ -329,15 +358,23 @@ public class MainActivity extends AppCompatActivity {
     private void afficheHistoriqueCompte()  // Rempli historiqueCompte par livredecompte
     {
         Log.i("DEBUG","Fonction afficheHistorueCompte");
-        String text="Texte à afficher";
+        /*String text="Texte à afficher";
         SpannableString lontTexte = new SpannableString(text);
         BackgroundColorSpan fondjaune=new BackgroundColorSpan(Color.YELLOW);
         BackgroundColorSpan fondvert=new BackgroundColorSpan(Color.GREEN);
-        int i = 0;
-        historiqueCompte.setText(lontTexte);
-        for (Operation operation : livredecompte)
-            historiqueCompte.append(operation.afficheOperationString());
-       int k = 0;
+        int i = 0;*/
+        historiqueCompte.setText("");
+        int k = 0;
+        for(k=0;k<livredecompte.size();k++) {
+            Log.i("DEBUG","Frequence:"+livredecompte.get(k).getFrequence());
+            if (livredecompte.get(k).getFrequence() !=0)
+                historiqueCompte.append("Une répétition enlevée \n");
+            if (livredecompte.get(k).getFrequence() == 0)
+                historiqueCompte.append(livredecompte.get(k).afficheOperationString());
+        }
+            //for (Operation operation : livredecompte)
+            //if(operation.getFrequence()==0) historiqueCompte.append(operation.afficheOperationString());
+        k = 0;
         soldeNum = 0;
         for (k = 0; k < livredecompte.size(); k++) {
             if (livredecompte.get(k).getTypeOperation() == 0)
@@ -362,15 +399,25 @@ public class MainActivity extends AppCompatActivity {
         historiqueCompte.setText("");
         testsifichierexiste();
         loadLivredecompte(premierfichier());
+        Log.i("DEBUG", "Avant cherche repetion");
+        ///////////////////////////////////
+        //              TODO ici on bascule la répétion de frequence !!
+        //              TODO fonction chercherepetition
+        //          Si frequence = 0 , pas de soucis, on continue, si frequence >0 = Repetition à traiter.
+        ///////////////////////////////////
+        for(Operation operation:livredecompte)
+            if (operation.getFrequence()!=0) chercherepetition(operation);
+
+        saveLivredeCompte();
         afficheHistoriqueCompte();
-        Log.i("DEBUG", "Avant chercherepetion");
-        //chercherepetition();
         nomDuCompte.setText(livredecompte.get(0).getNomDuCompte());
         //Log.i("DEBUG","Passage par la fonction Init()");
+        Log.i("DEBUG","FIN Fonction Init");
+
 
     }
 
-    public void ajouteLigneDeCompte(String ligne) // on ajoute la ligne de compte à ArrayList<Operation> livredecompte
+    private void ajouteLigneDeCompte(String ligne) // on ajoute la ligne de compte à ArrayList<Operation> livredecompte
     {   Log.i("DEBUG","Fonction ajouteLigneDeCompte");
         int position = 0;
         int typeOperation = 0;
@@ -425,14 +472,10 @@ public class MainActivity extends AppCompatActivity {
         i++;
         k = i;
 
-        ///////////////////////////////////
-        //              TODO ici on bascule la répétion de frequence !!
-        //              TODO fonction chercherepetition
-        //          Si frequence = 0 , pas de soucis, on continue, si frequence >0 = Repetition à traiter.
-        ///////////////////////////////////
-        if (operation.getFrequence()!=0) chercherepetition(operation);
 
-        rangeParDate(operation, calculpositiondate(operation.getJour(), operation.getMois(), operation.getAnnee()));
+        if (operation.getFrequence()==0)
+                rangeParDate(operation, calculpositiondate(operation.getJour(), operation.getMois(), operation.getAnnee()));
+        else chercherepetition(operation);
     }
 
     private void rangeParDate(Operation op, int position) {
@@ -622,7 +665,10 @@ public class MainActivity extends AppCompatActivity {
             if(getTodayDatePosition()>operation.getPosition()) {
                 Log.i("DEBUG","Postion aujourd'hui="+getTodayDatePosition()+"position de l'opération"+operation.getPosition());
                 demandeajouteautomatique(operation);
+                //saveLivredeCompte();
+                //afficheHistoriqueCompte();
             }
+            else rangeParDate(operation,operation.getPosition());
 
         // Il faut charger toutes les repetitions
         // calculer la date de répetitions.
@@ -681,44 +727,44 @@ public class MainActivity extends AppCompatActivity {
 
 
     void demandeajouteautomatique(Operation op){
-        AlertDialog.Builder demandeAjoutOperationAutomatique = new AlertDialog.Builder(MainActivity.this);
-        demandeAjoutOperationAutomatique.setTitle("Voulez vous ajouter cette opération ?");
-        demandeAjoutOperationAutomatique.setMessage(op.afficheOperationString());
-        demandeAjoutOperationAutomatique.setPositiveButton("Oui", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                if(op.getFrequence()==10){
-                    op.setFrequence(0);
-                    Log.i("DEBUG","Première ligne repetition sans frequance:");
-                    op.afficheLog();
-                    rangeParDate(op,op.getPosition());
-                    op.setFrequence(10);
-                    op.ajouteunmois();
-                    Log.i("DEBUG","deuxième ligne repetition avec frequence plus tard:");
+        Intent intent = new Intent(
+                MainActivity.this, //On crée le lien entre les deux activités
+                GestionRepetition.class           // la deuxième activité est déclaré comme CLASS
+        );
+        ; // Opération de crédit
+        intent.putExtra("MESSAGE_NOM_DU_COMPTE", nomDuCompte.getText().toString());
+        intent.putExtra(MESSAGE_MONTANT,String.valueOf(op.getMontant()));
+        intent.putExtra(MESSAGE_BENEFICIAIRE,op.getBenef());
+        intent.putExtra(MESSAGE_DATE,op.getDateStr());
+        intent.putExtra("OperationComplete",op.SauveOperationString());
 
-                    //rangeParDate(op,op.getPosition());
-                }
 
-                Toast.makeText( MainActivity.this, "Vous avez Validé" , Toast.LENGTH_SHORT ).show();
-            }
-        });
-        demandeAjoutOperationAutomatique.setNegativeButton("Non", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                Toast.makeText( MainActivity.this, "Vous avez Refusé" , Toast.LENGTH_SHORT ).show();
-            }
-        });
-        demandeAjoutOperationAutomatique.setNeutralButton("Supprimer", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                Toast.makeText( MainActivity.this, "Vous avez supprimé la répétition" , Toast.LENGTH_SHORT ).show();
-            }
-        });
-        demandeAjoutOperationAutomatique.show();
+        Log.i("DEBUG","Demandeajoutautomoatique montant="+op.getMontant());
+        activityResultLauncherRepetition.launch(intent);
         Log.i("DEBUG","il faut ajouter cette operation" + op.afficheOperationString());
     }
 
 
+    void ajoutAutomatiqueOperation(String ligne){
+        Operation op=new Operation("","",1,1,1,1,1,1,1);
+        Log.i("DEBUG",ligne);
+        op.decode(ligne);
+        Log.i("DEBUG","Arrivé dans AjoutAutomatiqueOperation");
+        op.afficheLog();
+        //op.afficheLog();
+        int f;
+        f=op.getFrequence();
+        op.setFrequence(0);
+        op.afficheLog();
+        rangeParDate(op,op.getPosition());
+        Operation opsuivante=new Operation(op.getNomDuCompte(),op.getBenef(),op.getTypeOperation(),op.getMontant(),f,op.getJour(),op.getMois(),op.getAnnee(),calculpositiondate(op.getJour(),op.getMois(),op.getAnnee()));
+        if (f==10) opsuivante.ajoutemois(1);
+        if (f==20) opsuivante.ajoutemois(2);
+
+
+        rangeParDate(opsuivante,opsuivante.getPosition());
+        afficheHistoriqueCompte();
+    }
 
 }// fin de la class Main Activity
 
