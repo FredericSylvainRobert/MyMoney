@@ -83,7 +83,7 @@ public class Operation  {
     }
 
     public String SauveOperationString(){
-
+            position = jour + mois * 31 + annee * 365;
         return position+","+nomDuCompte+","+beneficiaire+","+typeOperation+","+montant+","+frequence+","+jour+","+mois+","+annee+"*\n";
     }
 
@@ -160,4 +160,28 @@ public class Operation  {
         return 30;
 
     }
+
+    public void setDateString(String dateString){
+        int i=0;
+        int j=0;
+        Log.i("DEBUG","dateSring="+dateString+"!");
+        for(i=0;i<dateString.length();i++) {
+            Log.i("DEBUG",String.valueOf(dateString.charAt(i)));
+            Log.i("DEBUG","i="+i);
+        }
+        i=0;
+        while(dateString.charAt(i)!='/') i++;
+        Log.i("DEBUG","jour="+dateString.substring(0, i)+"!i="+i);
+
+        jour=Integer.valueOf(dateString.substring(0, i ));i++;
+        j=i;
+        while(dateString.charAt(i)!='/') i++;
+        Log.i("DEBUG","mois="+dateString.substring(j, i)+"!");
+
+        mois=Integer.valueOf(dateString.substring(j,i));
+        annee=Integer.valueOf(dateString.substring(i+1,dateString.length()));
+
+
+    }
+
 }

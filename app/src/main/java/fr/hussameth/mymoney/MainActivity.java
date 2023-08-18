@@ -751,7 +751,6 @@ public class MainActivity extends AppCompatActivity {
         op.decode(ligne);
         Log.i("DEBUG","Arrivé dans AjoutAutomatiqueOperation");
         op.afficheLog();
-        //op.afficheLog();
         int f;
         f=op.getFrequence();
         op.setFrequence(0);
@@ -760,8 +759,6 @@ public class MainActivity extends AppCompatActivity {
         Operation opsuivante=new Operation(op.getNomDuCompte(),op.getBenef(),op.getTypeOperation(),op.getMontant(),f,op.getJour(),op.getMois(),op.getAnnee(),calculpositiondate(op.getJour(),op.getMois(),op.getAnnee()));
         if (f==10) opsuivante.ajoutemois(1);
         if (f==20) opsuivante.ajoutemois(2);
-
-
         rangeParDate(opsuivante,opsuivante.getPosition());
         afficheHistoriqueCompte();
     }

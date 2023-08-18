@@ -39,6 +39,7 @@ public class GestionRepetition extends AppCompatActivity {
     private TextView date;
     private DatePickerDialog datePickerDialog;
     private String operationComplete;
+    private Operation op=new Operation("","",1,1,1,1,1,1,1);
 
 
     @Override
@@ -55,12 +56,16 @@ public class GestionRepetition extends AppCompatActivity {
         date=findViewById(R.id.editTextDate);
 
 
-        nomDuCompte = this.getIntent().getExtras().getString("MESSAGE_NOM_DU_COMPTE");
-        afficheMontant.setText(this.getIntent().getExtras().getString(MESSAGE_MONTANT));
-        beneficiaire.setText((this.getIntent().getExtras().getString(MESSAGE_BENEFICIAIRE)));
+        op.setNomDuCompte(this.getIntent().getExtras().getString("MESSAGE_NOM_DU_COMPTE"));
+        op.setMontant(Float.valueOf(this.getIntent().getExtras().getString(MESSAGE_MONTANT)));
+        op.setBenef(this.getIntent().getExtras().getString(MESSAGE_BENEFICIAIRE));
         date.setText(this.getIntent().getExtras().getString(MESSAGE_DATE));
-        operationComplete=this.getIntent().getExtras().getString("OperationComplete");
+        op.setDateString(date.getText().toString());
 
+        operationComplete=this.getIntent().getExtras().getString("OperationComplete"); //intent.putExtra("OperationComplete",op.SauveOperationString());
+        labelNomDuCompte.setText(op.getNomDuCompte());
+        beneficiaire.setText(op.getBenef());
+        afficheMontant.setText(String.valueOf(op.getMontant()));
 
         labelNomDuCompte.setText((nomDuCompte));
         initDatePicker();
@@ -87,7 +92,13 @@ public class GestionRepetition extends AppCompatActivity {
         public void onClick(View view) {
 
             Intent data = new Intent();
-            data.putExtra("Validé",operationComplete);
+
+            Operation op=new Operation("","",1,1,1,1,1,1,1);
+            op.decode(operationComplete);
+            op.setMontant(Float.valueOf(afficheMontant.getText().toString()));
+            op.setDateString(date.getText().toString());
+            Log.i("DEBUG","On a valide l'operation repetée:"+op.SauveOperationString());
+            data.putExtra("Validé",op.SauveOperationString());
             setResult(RESULT_OK, data);
             finish();
         }
@@ -105,10 +116,12 @@ public class GestionRepetition extends AppCompatActivity {
             }
         };
         Calendar cal = Calendar.getInstance();
-        int year= cal.get(Calendar.YEAR);
-        int month= cal.get(Calendar.MONTH);
-        int day= cal.get(Calendar.DAY_OF_MONTH);
-
+        //int year= cal.get(Calendar.YEAR);
+        //int month= cal.get(Calendar.MONTH);
+        //int day= cal.get(Calendar.DAY_OF_MONTH);
+        int year=op.getAnnee();
+        int month=op.getMois()-1;
+        int day=op.getJour();
         datePickerDialog= new DatePickerDialog(this,dateSetListener,year,month,day);
 
     }
