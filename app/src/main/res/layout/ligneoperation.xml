@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/montant"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <EditText
+        android:id="@+id/date"
+        android:layout_width="101dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:ems="10"
+        android:hint="01/01/2021"
+        android:inputType="date" />
+
+    <EditText
+        android:id="@+id/beneficiaire"
+        android:layout_width="114dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:ems="10"
+        android:inputType="text"
+        android:text="EDF" />
+
+    <TextView
+        android:id="@+id/montantaffichage"
+        android:layout_width="114dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="10€00"
+        android:textAlignment="center"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/solde"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="25€00"
+        android:textAlignment="textEnd"
+        android:textSize="18sp" />
+</LinearLayout>
