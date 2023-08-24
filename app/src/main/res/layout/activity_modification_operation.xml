@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ModificationOperation">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/txtBandeauHaut"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/BleuMoney"
+            android:text="@string/txtTitreAppli"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="40dp" />
+
+        <TextView
+            android:id="@+id/lblNomCompteAjoute"
+            android:background="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:layout_below="@+id/txtBandeauHaut"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+
+            android:text="Nom du Compte "
+            android:textColor="@color/black"
+            android:textSize="30dp"
+            android:textStyle="italic" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/datePickerButton"
+                style="?android:spinnerStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="79dp"
+
+                android:layout_below="@+id/txtDate"
+                android:layout_marginTop="0dp"
+                android:background="@color/white"
+                android:backgroundTint="@color/Bleuclair"
+                android:onClick="openDateClicker"
+                android:text="Calendrier"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="40px"
+                app:icon="@android:drawable/ic_menu_month"
+                app:iconGravity="textEnd"
+                app:iconPadding="8dp"
+                app:iconSize="28dp"
+                app:iconTintMode="src_in" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/txtDate_modi"
+                    android:background="@color/white"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/lblNomCompteAjoute"
+                    android:layout_marginStart="70dp"
+                    android:text="@string/txtDate"
+                    android:layout_weight="0.5"
+                    android:textColor="@color/black"
+                    android:textSize="20dp" />
+
+                <EditText
+                    android:id="@+id/editTextDate"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="40dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_toEndOf="@+id/txtDate"
+                    android:background="@color/white"
+                    android:ems="10"
+                    android:hint="JJ/MM/AAAA"
+                    android:inputType="date"
+                    android:textAlignment="center"
+                    android:textColor="@color/black" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/txtBeneficiaire"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/editTextDate"
+                android:layout_marginTop="30dp"
+                android:layout_marginBottom="30dp"
+                android:background="@color/white"
+                android:text="@string/txtLibelle"
+                android:textColor="@color/black"
+                android:textSize="20dp" />
+
+            <EditText
+                android:id="@+id/lblBeneficiaire"
+                android:layout_width="286dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/editTextDate"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="30dp"
+                android:layout_toEndOf="@+id/txtBeneficiaire"
+                android:background="@color/white"
+                android:ems="10"
+                android:hint=" Bénéficiaire "
+                android:inputType="text"
+                android:maxLength="18"
+                android:textAlignment="center"
+                android:textColor="@color/black" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/txtMontant"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/txtBeneficiaire"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:background="@color/white"
+                android:onClick="openDatePicker"
+                android:text="@string/txtMontant"
+                android:textColor="@color/black"
+                android:textSize="20dp" />
+
+            <EditText
+                android:id="@+id/lblMontant"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/lblBeneficiaire"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="20dp"
+                android:layout_toEndOf="@+id/txtMontant"
+                android:background="@color/white"
+                android:ems="10"
+                android:hint="25.00"
+                android:inputType="numberDecimal" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/Modifie"
+                android:layout_width="180dp"
+                android:layout_height="50dp"
+                android:text="Modifie"
+                android:layout_marginEnd="40dp"/>
+            <Button
+                android:id="@+id/Annule"
+                android:layout_width="180dp"
+                android:layout_height="50dp"
+                android:text="Annule" />
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

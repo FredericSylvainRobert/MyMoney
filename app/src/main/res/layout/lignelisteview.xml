@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:textAlignment="center"
+    android:background="#FFFFFF"
+    >
+
+    <TextView
+        android:id="@+id/listeDate"
+        android:layout_marginEnd="3dp"
+        android:layout_width="80dp"
+        android:layout_marginBottom="2dp"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:background="#F0F0F0"
+        android:text=""
+        android:textColor="@color/black"
+
+    />
+
+    <TextView
+        android:id="@+id/listeBeneficiaire"
+        android:layout_width="130dp"
+        android:background="#F0F0F0"
+        android:layout_marginEnd="3dp"
+        android:textAlignment="center"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textColor="@color/black"
+        />
+
+    <TextView
+        android:id="@+id/listMontant"
+        android:layout_width="70dp"
+        android:background="#F0F0F0"
+        android:layout_marginEnd="3dp"
+        android:textAlignment="center"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textColor="@color/black"
+        />
+
+    <TextView
+        android:id="@+id/listSolde"
+        android:layout_width="70dp"
+        android:background="#F0F0F0"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+
+        android:text=""
+        android:textColor="@color/black"
+        />
+</LinearLayout>

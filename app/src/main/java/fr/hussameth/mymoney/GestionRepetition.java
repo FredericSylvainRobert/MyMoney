@@ -136,14 +136,5 @@ public class GestionRepetition extends AppCompatActivity {
     }
 
 
-
-
-
-
-
-
-
-
-
-
+    // fin de la class GestionRepetition
 }

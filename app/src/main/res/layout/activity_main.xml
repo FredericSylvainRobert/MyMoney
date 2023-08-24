@@ -87,6 +87,8 @@
         <ImageButton
             android:id="@+id/buttonCrea"
             android:layout_width="60dp"
+            android:layout_marginTop="10dp"
+
             android:layout_height="70dp"
             android:layout_marginStart="15dp"
             app:srcCompat="@drawable/iconecreation" />
@@ -98,7 +100,7 @@
 
         android:id="@+id/linearLayoutAffichecompte"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="10dp"
         android:layout_marginTop="10dp"
 
         android:background="#FFC0C0F0"
@@ -135,9 +137,8 @@
 
         <LinearLayout
 
-            android:id="@+id/linearLayoutAffichecompte"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="300dp"
             android:layout_marginTop="10dp"
 
             android:background="#FFC0C0F0"
@@ -145,31 +146,14 @@
             app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
 
 
-            <ScrollView
-                android:id="@+id/scrollViewlist"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:layout_above="@+id/buttonSave"
-                android:layout_below="@+id/lblNomCompte"
-                android:layout_marginTop="0dp"
-                android:layout_marginBottom="0dp"
-                android:fillViewport="true">
+            <ListView
+                android:id="@+id/listview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="3dp"
+                android:background="#eef"
+                android:clickable="true" />
 
-                <TextView
-                    android:id="@+id/HistoriqueCompteList"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="20dp"
-                    android:background="#eef"
-                    android:gravity="bottom"
-                    android:includeFontPadding="false"
-                    android:scrollbars="vertical"
-
-
-                    android:text="Ici sera ecrit l'histoire du compte en list"
-                    android:textColor="@color/black"
-                    android:textSize="15dp" />
-            </ScrollView>
         </LinearLayout>
 
     <LinearLayout

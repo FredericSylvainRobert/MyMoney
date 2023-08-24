@@ -16,8 +16,10 @@ import android.text.Spanned;
 import android.text.style.BackgroundColorSpan;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,8 +38,8 @@ import java.util.HashMap;
 public class MainActivity extends AppCompatActivity {
 
     ArrayList<Operation> livredecompte = new ArrayList<>(); //création du livre de 1 compte
-    ArrayList<Operation> repetition = new ArrayList<>();
 
+    AlertDialog.Builder AlertBox;
 
     private static final String FILE_NAME = "Default.txt";
     public static final String MESSAGE_MONTANT = "Montant";
@@ -71,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView nomDuCompte;
     private float soldeNum = 0;
     private String nomDuFichier = "";
+    ListView mlist;
 
     @Override
     protected void onResume() {
@@ -125,7 +128,12 @@ public class MainActivity extends AppCompatActivity {
         creationButton.setOnClickListener(creationBoutonListener);
         boutonChoixFichier = (Button) findViewById(R.id.buttonChoixFichier);
         boutonChoixFichier.setOnClickListener(choixFichierBoutonListener);
+        mlist= (ListView) findViewById(R.id.listview);
         init();// appelle la fonction Init
+        /*LivredeCompteAdapter ldcAdapter = new LivredeCompteAdapter (this,
+                R.layout.lignelisteview,
+                livredecompte);
+        mlist.setAdapter(ldcAdapter);//*/
     }
 
 
@@ -284,6 +292,25 @@ public class MainActivity extends AppCompatActivity {
                     }
             );
 
+    ActivityResultLauncher<Intent> activityResultLauncherModificationOperation =
+            registerForActivityResult(
+                    new ActivityResultContracts.StartActivityForResult(),
+                    new ActivityResultCallback<ActivityResult>() {
+                        @Override
+                        public void onActivityResult(ActivityResult activityResult) {
+                            int result = activityResult.getResultCode();
+                            //("DEBUG","Result="+result)
+
+                            Intent data = activityResult.getData();
+                            if (result == RESULT_OK) {
+                               //
+                                // TODO on récupère l'operation modifiée
+                                //
+                            }
+                        }
+                    }
+            );
+
 
     //
     //      Déclaration des boutons Listenner
@@ -370,8 +397,8 @@ public class MainActivity extends AppCompatActivity {
             Log.i("DEBUG","Frequence:"+livredecompte.get(k).getFrequence());
             if (livredecompte.get(k).getFrequence() !=0)
                 historiqueCompte.append("Une répétition enlevée \n");
-            if (livredecompte.get(k).getFrequence() == 0)
-                historiqueCompte.append(livredecompte.get(k).afficheOperationString());
+            //if (livredecompte.get(k).getFrequence() == 0)
+                //historiqueCompte.append(livredecompte.get(k).afficheOperationString());
         }
             //for (Operation operation : livredecompte)
             //if(operation.getFrequence()==0) historiqueCompte.append(operation.afficheOperationString());
@@ -388,6 +415,32 @@ public class MainActivity extends AppCompatActivity {
             soldeNum = soldeNum / 100;
         }
         solde.setText(String.valueOf(soldeNum));
+        //
+        //
+        //          TODO Gestion de l'affichage ListView
+        //
+        //
+        LivredeCompteAdapter ldcAdapter = new LivredeCompteAdapter (this,
+                R.layout.lignelisteview,
+                livredecompte);
+        mlist.setAdapter(ldcAdapter);
+        mlist.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Log.i("DEBUG",livredecompte.get(i).afficheOperationString());
+                Intent intent = new Intent(
+                        MainActivity.this, //On crée le lien entre les deux activités
+                        ModificationOperation.class           // la deuxième activité est déclaré comme CLASS
+                );
+                //typeOperation = 0; // Opération de débit
+                intent.putExtra("nomducompte", livredecompte.get(i).getNomDuCompte());
+                intent.putExtra("beneficaire",livredecompte.get(i).getBenef());
+                intent.putExtra("montant",String.valueOf(livredecompte.get(i).getMontant()));
+                intent.putExtra("date",livredecompte.get(i).getDateStr());
+                activityResultLauncherModificationOperation.launch(intent);
+            }
+        });
+        //*/
     }
 
     private void init() {
