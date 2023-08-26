@@ -7,13 +7,8 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.style.BackgroundColorSpan;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -30,10 +25,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -50,6 +43,8 @@ public class MainActivity extends AppCompatActivity {
     public static final String MESSAGE_TYPEOP = "TypeOperation";
     public static final String MESSAGE_FREQUENCE = "frequence";
     public static final String EXTENSION = ".txt";
+    private static final int RESULT_SUPPRIME=2;
+    private int Initfait=0;
     //
     //   les differents types de variable JAVA
     //
@@ -148,21 +143,19 @@ public class MainActivity extends AppCompatActivity {
                         public void onActivityResult(ActivityResult activityResult) {
                             int result = activityResult.getResultCode();
                             Intent data = activityResult.getData();
-                            //Log.i("DEBUG","Result="+result+"Result ok="+RESULT_OK);
                             if (result == RESULT_OK) {
                                 String donneeRetour;
                                 String montantString;
                                 String benef;
                                 String frequence="0";
+                                String nomducompte="";
                                 int typop=0;
                                 montantString = data.getStringExtra(MESSAGE_MONTANT);
                                 benef = data.getStringExtra(MESSAGE_BENEFICIAIRE);
                                 donneeRetour = data.getStringExtra(MESSAGE_DATE);
-
                                 typop = Integer.parseInt(data.getStringExtra(MESSAGE_TYPEOP));
-
                                 frequence = data.getStringExtra(MESSAGE_FREQUENCE);
-
+                                nomducompte=data.getStringExtra("nomducompte");
                                 int jour;
                                 int mois;
                                 int annee;
@@ -180,14 +173,13 @@ public class MainActivity extends AppCompatActivity {
                                 int posi = 0;
                                 posi = calculpositiondate(jour, mois, annee);
 
-                                Operation operationajout = new Operation(nomDuCompte.getText().toString(), benef, typop, Float.valueOf(montantString),
+                                Operation operationajout = new Operation(nomducompte, benef, typop, Float.valueOf(montantString),
                                         Integer.valueOf(frequence), jour, mois, annee, posi);
                                 nomDuCompte.setText(operationajout.getNomDuCompte());
                                 if(operationajout.getFrequence()==0) ajouteLigneDeCompte(operationajout.SauveOperationString());
                                 if(operationajout.getFrequence()!=0) ajoutAutomatiqueOperation(operationajout.SauveOperationString());
                                 saveLivredeCompte();
                                 afficheHistoriqueCompte();
-                                Toast.makeText(MainActivity.this, "Solde mis à jour", Toast.LENGTH_LONG).show();
                             } else {
                                 Toast.makeText(MainActivity.this, "Opération annulée", Toast.LENGTH_LONG).show();
                             }
@@ -208,7 +200,6 @@ public class MainActivity extends AppCompatActivity {
                                 String ligne;
                                 ligne=data.getStringExtra("Validé");
                                 ajoutAutomatiqueOperation(ligne);
-                                Log.i("DEBUG","Retour de le rapatition"+ligne);
                                 //
                                 // TODO Recuperer l'opération à repeter
                                 //
@@ -298,14 +289,23 @@ public class MainActivity extends AppCompatActivity {
                     new ActivityResultCallback<ActivityResult>() {
                         @Override
                         public void onActivityResult(ActivityResult activityResult) {
+                            String ligne="";
+                            int position;
                             int result = activityResult.getResultCode();
-                            //("DEBUG","Result="+result)
+                            Operation op;
+                            op=new Operation("","",1,0.0f,1,1,1,1,1);
 
                             Intent data = activityResult.getData();
+                            if (result==RESULT_SUPPRIME) { //RESULT_SUPPRIME =2
+                                position= Integer.valueOf(data.getStringExtra("position"));
+                                livredecompte.remove(position);
+                            }
                             if (result == RESULT_OK) {
-                               //
-                                // TODO on récupère l'operation modifiée
-                                //
+                                ligne=data.getStringExtra("VALIDE");
+                                position= Integer.valueOf(data.getStringExtra("position"));
+                                livredecompte.remove(position);
+                                op.decode(ligne);
+                                rangeParDate(op,op.getPosition());
                             }
                         }
                     }
@@ -386,22 +386,14 @@ public class MainActivity extends AppCompatActivity {
     private void afficheHistoriqueCompte()  // Rempli historiqueCompte par livredecompte
     {
         Log.i("DEBUG","Fonction afficheHistorueCompte");
-        /*String text="Texte à afficher";
-        SpannableString lontTexte = new SpannableString(text);
-        BackgroundColorSpan fondjaune=new BackgroundColorSpan(Color.YELLOW);
-        BackgroundColorSpan fondvert=new BackgroundColorSpan(Color.GREEN);
-        int i = 0;*/
         historiqueCompte.setText("");
         int k = 0;
         for(k=0;k<livredecompte.size();k++) {
-            Log.i("DEBUG","Frequence:"+livredecompte.get(k).getFrequence());
+
+            Log.i("DEBUG","Boucle affichehistoriquecompte"+livredecompte.get(k).afficheOperationString());
             if (livredecompte.get(k).getFrequence() !=0)
                 historiqueCompte.append("Une répétition enlevée \n");
-            //if (livredecompte.get(k).getFrequence() == 0)
-                //historiqueCompte.append(livredecompte.get(k).afficheOperationString());
         }
-            //for (Operation operation : livredecompte)
-            //if(operation.getFrequence()==0) historiqueCompte.append(operation.afficheOperationString());
         k = 0;
         soldeNum = 0;
         for (k = 0; k < livredecompte.size(); k++) {
@@ -437,6 +429,8 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra("beneficaire",livredecompte.get(i).getBenef());
                 intent.putExtra("montant",String.valueOf(livredecompte.get(i).getMontant()));
                 intent.putExtra("date",livredecompte.get(i).getDateStr());
+                intent.putExtra("OperationComplete",livredecompte.get(i).SauveOperationString());
+                intent.putExtra("position",String.valueOf(i));
                 activityResultLauncherModificationOperation.launch(intent);
             }
         });
@@ -451,8 +445,13 @@ public class MainActivity extends AppCompatActivity {
         nomDuCompte.setText(R.string.NomDuCompte);
         solde.setText(soldeNum + " €");
         historiqueCompte.setText("");
-        testsifichierexiste();
-        loadLivredecompte(premierfichier());
+        if (Initfait==0){
+            testsifichierexiste();
+            loadLivredecompte(premierfichier());
+            Initfait=1;
+        }
+        else
+            loadLivredecompte(livredecompte.get(0).getNomDuCompte().toString());
         Log.i("DEBUG", "Avant cherche repetion");
         ///////////////////////////////////
         //              TODO ici on bascule la répétion de frequence !!
@@ -461,7 +460,15 @@ public class MainActivity extends AppCompatActivity {
         ///////////////////////////////////
         for(Operation operation:livredecompte)
             if (operation.getFrequence()!=0) chercherepetition(operation);
+        int i;
+        livredecompte.get(0).setSolde(livredecompte.get(0).getMontant());
+        Log.i("DEBUG","Soldelivrecompte(0)="+livredecompte.get(0).getMontant());
+        if (livredecompte.size()>1)
+             for(i=1;i<livredecompte.size();i++)
+                        {livredecompte.get(i).setSolde(livredecompte.get(i-1).getSolde()+livredecompte.get(i).getMontant());
+                            Log.i("DEBUG","Soldelivrecompte("+i+")="+livredecompte.get(i).getSolde());
 
+                        }
         saveLivredeCompte();
         afficheHistoriqueCompte();
         nomDuCompte.setText(livredecompte.get(0).getNomDuCompte());
@@ -496,6 +503,7 @@ public class MainActivity extends AppCompatActivity {
         k = i;
         while (ligne.charAt(i) != ',') i++;   /// Lecture du nomducompte
         operation.setNomDuCompte(ligne.substring(k, i));
+        Log.i("DEBUG","AjoutLignedeCompte, nomducompte="+operation.getNomDuCompte());
         i++;
         k = i;
         while (ligne.charAt(i) != ',') i++;   //// Lecture du beneficiaire
@@ -560,6 +568,7 @@ public class MainActivity extends AppCompatActivity {
         Log.i("DEBUG","saveLivredeCompte");
         FileOutputStream fos = null;
         nomDuFichier = livredecompte.get(0).getNomDuCompte();
+        Log.i("DEBUG","saveLivredeCompte"+nomDuFichier);
 
         try {
             fos = openFileOutput(nomDuFichier + EXTENSION, MODE_PRIVATE);

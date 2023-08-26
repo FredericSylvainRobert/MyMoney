@@ -121,6 +121,7 @@ public class AjouteOperation extends AppCompatActivity {
         public void onClick(View view) {
             Log.i("DEBUG","Bouton Valide cliqué");
             Intent data = new Intent();
+            data.putExtra("nomducompte",nomDuCompte);
             data.putExtra(MESSAGE_MONTANT, montant.getText().toString());
             data.putExtra(MESSAGE_BENEFICIAIRE, beneficiaire.getText().toString());
             data.putExtra(MESSAGE_DATE,date.getText().toString());

@@ -10,7 +10,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="@color/white">
 
         <TextView
             android:id="@+id/txtBandeauHaut"
@@ -172,13 +173,20 @@
 
             <Button
                 android:id="@+id/Modifie"
-                android:layout_width="180dp"
+                android:layout_width="120dp"
                 android:layout_height="50dp"
                 android:text="Modifie"
-                android:layout_marginEnd="40dp"/>
+                android:layout_marginEnd="25dp"/>
+            <Button
+                android:id="@+id/Supprime"
+                android:layout_width="120dp"
+                android:layout_height="50dp"
+                android:text="Supprime"
+                android:layout_marginEnd="25dp"/>
+
             <Button
                 android:id="@+id/Annule"
-                android:layout_width="180dp"
+                android:layout_width="120dp"
                 android:layout_height="50dp"
                 android:text="Annule" />
 
