@@ -42,12 +42,13 @@ public class LivredeCompteAdapter extends ArrayAdapter<Operation> {
         int annee=getItem(position).getAnnee();
         float solde=getItem(position).getSolde();
         int couleurText=getItem(position).gettextColor();
+        int couleurSolde=getItem(position).getCouleurSolde();
         String dateStr=getItem(position).getDateStr();
 
 
 
         Operation operation=new Operation(nomCompte,benef,typop,montant,freq,jour,mois,annee,1);
-        Log.i("DEBUG","LivreComtpeAdapter, nomducompte="+operation.getNomDuCompte());
+        //Log.i("DEBUG","LivreComtpeAdapter, nomducompte="+operation.getNomDuCompte());
         LayoutInflater inflater= LayoutInflater.from(mContext);
         convertview = inflater.inflate(mRessource,parent,false);
 
@@ -61,7 +62,7 @@ public class LivredeCompteAdapter extends ArrayAdapter<Operation> {
         tvMontant.setText(String.valueOf(montant));
         tvMontant.setBackgroundColor(couleurText);
         tvSolde.setText(String.valueOf(solde));
-
+        tvSolde.setBackgroundColor(couleurSolde);
         return convertview;
     }
 

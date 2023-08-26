@@ -12,6 +12,7 @@ public class Operation  {
     private int annee=2000;
     private int position=1;
     private int couleur=0xff0000ff ;
+    private int couleurSolde=0xff0000FF;
     private float solde=0.0f;
                                                 // ici on créée le construteur
     public Operation (String nomCompte,String benef,int typeoperation ,float mont,int freq, int Jour, int Mois, int Annee,int Position){
@@ -122,6 +123,8 @@ public class Operation  {
 
     public void setSolde(float sold){
         solde=sold;
+        if (solde<0) couleurSolde=0xCCff4444;
+        else couleurSolde=0xCC44ff44;
     }
 
     public float getSolde(){
@@ -154,6 +157,10 @@ public class Operation  {
     }
     public void setAnnee(int an){
         annee=an;
+    }
+
+    public int getCouleurSolde() { return couleurSolde;
+
     }
 
     public void ajoutemois(int nbmois){

@@ -394,6 +394,19 @@ public class MainActivity extends AppCompatActivity {
             if (livredecompte.get(k).getFrequence() !=0)
                 historiqueCompte.append("Une répétition enlevée \n");
         }
+        int i;
+        livredecompte.get(0).setSolde(Math.round(livredecompte.get(0).getMontant()*100)/100);
+
+        Log.i("DEBUG","Soldelivrecompte(0)="+livredecompte.get(0).getMontant());
+        if (livredecompte.size()>1)
+            for(i=1;i<livredecompte.size();i++)
+            {
+                if (livredecompte.get(i).getTypeOperation()==1) livredecompte.get(i).setSolde(Math.round((livredecompte.get(i-1).getSolde()+livredecompte.get(i).getMontant())*100)/100);
+                else livredecompte.get(i).setSolde(Math.round((livredecompte.get(i-1).getSolde()-livredecompte.get(i).getMontant())*100)/100);
+                Log.i("DEBUG","Soldelivrecompte("+i+")="+livredecompte.get(i).getSolde());
+
+            }
+
         k = 0;
         soldeNum = 0;
         for (k = 0; k < livredecompte.size(); k++) {
@@ -460,15 +473,6 @@ public class MainActivity extends AppCompatActivity {
         ///////////////////////////////////
         for(Operation operation:livredecompte)
             if (operation.getFrequence()!=0) chercherepetition(operation);
-        int i;
-        livredecompte.get(0).setSolde(livredecompte.get(0).getMontant());
-        Log.i("DEBUG","Soldelivrecompte(0)="+livredecompte.get(0).getMontant());
-        if (livredecompte.size()>1)
-             for(i=1;i<livredecompte.size();i++)
-                        {livredecompte.get(i).setSolde(livredecompte.get(i-1).getSolde()+livredecompte.get(i).getMontant());
-                            Log.i("DEBUG","Soldelivrecompte("+i+")="+livredecompte.get(i).getSolde());
-
-                        }
         saveLivredeCompte();
         afficheHistoriqueCompte();
         nomDuCompte.setText(livredecompte.get(0).getNomDuCompte());
