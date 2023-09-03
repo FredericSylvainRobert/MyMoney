@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".Virement">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/bandeau">
+        <TextView
+            android:id="@+id/txtBandeauHaut"
+            android:layout_width="match_parent"
+            android:layout_height="67dp"
+            android:background="@color/BleuMoney"
+            android:text="@string/txtTitreAppli"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="40dp"
+             />
+
+
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/groupe1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/bandeau"
+        android:layout_marginTop="0dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/nomcomptedep"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="30sp"
+            android:textAlignment="center"
+            android:text="Virement" />
+
+        <EditText
+            android:id="@+id/montantvirement"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/buttonAnnule"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="0dp"
+            android:background="@color/white"
+            android:text="0,00 €"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="40dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/datePickerButton"
+                style="?android:spinnerStyle"
+                android:layout_width="210dp"
+                android:layout_height="77dp"
+                android:layout_below="@+id/txtDate"
+                android:layout_marginTop="20dp"
+                android:background="@color/white"
+                android:backgroundTint="@color/Bleuclair"
+                android:onClick="openDateClicker"
+                android:text="Calendrier"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="40px"
+                app:icon="@android:drawable/ic_menu_month"
+                app:iconGravity="textEnd"
+                app:iconPadding="8dp"
+                app:iconSize="28dp"
+                app:iconTintMode="src_in" />
+
+            <EditText
+                android:id="@+id/editTextDate2"
+                android:layout_width="175dp"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="date"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="20dp"
+                android:text="01/01/2002" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/groupe1"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/layoutgroupedebit"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="0dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Compte débité"
+                android:textAlignment="center"
+                android:textSize="20sp" />
+
+            <RadioGroup
+                android:id="@+id/groupedeb"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:checkedButton="@id/radioButton1">
+
+                <RadioButton
+                    android:id="@+id/radioButton1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="RadioButton"
+                    android:textAlignment="textStart"
+                    android:onClick="checkbutton"/>
+
+                <RadioButton
+                    android:id="@+id/radioButton2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    android:text="RadioButton"
+                    android:onClick="checkbutton"/>
+
+                <RadioButton
+                    android:id="@+id/radioButton3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="RadioButton"
+                    android:onClick="checkbutton"/>
+            </RadioGroup>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="0dp"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Compte destinataire"
+                android:textAlignment="center"
+                android:textSize="20sp" />
+
+            <RadioGroup
+                android:id="@+id/groupecred"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="left"
+                android:gravity="right"
+                android:checkedButton="@id/radioButton4">
+
+            >
+
+                <RadioButton
+                    android:id="@+id/radioButton4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:button="@null"
+                    android:drawableRight="?android:attr/listChoiceIndicatorSingle"
+                    android:text="RadioButton"
+                    android:gravity="center"
+                    android:onClick="checkbutton"/>
+
+                <RadioButton
+                    android:id="@+id/radioButton5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:button="@null"
+                    android:drawableRight="?android:attr/listChoiceIndicatorSingle"
+                    android:text="RadioButton"
+                    android:gravity="center"
+                    android:onClick="checkbutton"
+                    />
+
+                <RadioButton
+                    android:id="@+id/radioButton6"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:button="@null"
+                    android:drawableRight="?android:attr/listChoiceIndicatorSingle"
+                    android:text="RadioButton"
+                    android:gravity="center"
+                    android:onClick="checkbutton"/>
+            </RadioGroup>
+            />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/groupe1"
+        android:layout_marginTop="200dp"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/valide"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Valide" />
+
+            <Button
+                android:id="@+id/annule"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Annule" />
+        </LinearLayout>
+
+    </LinearLayout>
+</RelativeLayout>

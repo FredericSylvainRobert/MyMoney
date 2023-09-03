@@ -44,11 +44,9 @@
     <TextView
         android:id="@+id/listSolde"
         android:layout_width="70dp"
-        android:background="#F0F0F0"
         android:layout_height="wrap_content"
-        android:textAlignment="center"
-
+        android:background="#F0F0F0"
         android:text=""
-        android:textColor="@color/black"
-        />
+        android:textAlignment="center"
+        android:textColor="@color/black" />
 </LinearLayout>

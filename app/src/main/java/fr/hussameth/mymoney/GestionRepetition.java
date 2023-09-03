@@ -40,6 +40,7 @@ public class GestionRepetition extends AppCompatActivity {
     private DatePickerDialog datePickerDialog;
     private String operationComplete;
     private Operation op=new Operation("","",1,1,1,1,1,1,1);
+    private int position;
 
 
     @Override
@@ -60,6 +61,7 @@ public class GestionRepetition extends AppCompatActivity {
         op.setMontant(Float.valueOf(this.getIntent().getExtras().getString(MESSAGE_MONTANT)));
         op.setBenef(this.getIntent().getExtras().getString(MESSAGE_BENEFICIAIRE));
         date.setText(this.getIntent().getExtras().getString(MESSAGE_DATE));
+        position=Integer.parseInt(this.getIntent().getExtras().getString("Index"));
         op.setDateString(date.getText().toString());
 
         operationComplete=this.getIntent().getExtras().getString("OperationComplete"); //intent.putExtra("OperationComplete",op.SauveOperationString());
@@ -99,6 +101,7 @@ public class GestionRepetition extends AppCompatActivity {
             op.setDateString(date.getText().toString());
             Log.i("DEBUG","On a valide l'operation repetée:"+op.SauveOperationString());
             data.putExtra("Validé",op.SauveOperationString());
+            data.putExtra("Index",String.valueOf(position));// position dans livrerepetition
             setResult(RESULT_OK, data);
             finish();
         }

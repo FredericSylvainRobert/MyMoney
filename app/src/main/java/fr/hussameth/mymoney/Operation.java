@@ -12,7 +12,7 @@ public class Operation  {
     private int annee=2000;
     private int position=1;
     private int couleur=0xff0000ff ;
-    private int couleurSolde=0xff0000FF;
+    private int couleurSolde=0xff0000ff;
     private float solde=0.0f;
                                                 // ici on créée le construteur
     public Operation (String nomCompte,String benef,int typeoperation ,float mont,int freq, int Jour, int Mois, int Annee,int Position){
@@ -75,7 +75,7 @@ public class Operation  {
         Log.i("DEBUG","Compte:"+ nomCompte + "Type opé="+typeOperation+" ,Beneficaire:" + benef + ", Montant :" + mont + " ,Fréquence:" + freq +" ,Jour="+ jour+"/"+Mois+"/"+Annee+"position="+position);
     }
     public void afficheLog(){
-        Log.i("DEBUG","afficheLog : Compte:"+position+","+nomDuCompte + " ,Beneficaire:" + beneficiaire + ", Montant :" + montant + " ,Fréquence:" + frequence +" ,Jour="+ jour+"/"+mois+"/"+annee+"position="+position);
+        Log.i("DEBUG","afficheLog : Compte:"+nomDuCompte + " ,Beneficaire:" + beneficiaire + ", Montant :" + montant + " ,Fréquence:" + frequence +" ,Jour="+ jour+"/"+mois+"/"+annee+"position="+position);
     }
     public String afficheOperationString(){
         String signe="";
@@ -110,21 +110,22 @@ public class Operation  {
         return beneficiaire;
     }
     public void setBenef(String ben){
+        ben.replaceAll(",","_");
         beneficiaire=ben;
     }
 
     public int getTypeOperation(){return typeOperation;}
     public void setTypeOperation(int typ){typeOperation=typ;
-            if (typ==1) couleur=0xCC44ff44 ;
-            if (typ==0) couleur=0xCCff4444 ;
+            if (typ==1) couleur=0x9944ff44 ;
+            if (typ==0) couleur=0x99ff4444 ;
             if (typ==2) couleur=0xAA5555ff ;
         }
     public int gettextColor(){return couleur;}
 
     public void setSolde(float sold){
-        solde=sold;
-        if (solde<0) couleurSolde=0xCCff4444;
-        else couleurSolde=0xCC44ff44;
+        solde=Math.round(sold*100)/100.0f;
+        if (solde<0) couleurSolde=0x99ff4444;
+        else couleurSolde=0x9944ff44;
     }
 
     public float getSolde(){

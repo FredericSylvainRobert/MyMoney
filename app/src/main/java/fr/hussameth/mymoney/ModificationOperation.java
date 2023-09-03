@@ -44,16 +44,13 @@ public class ModificationOperation extends AppCompatActivity {
         boutonAnnule.setOnClickListener(boutonAnnuleListener);
         boutonSupprime=(Button) findViewById(R.id.Supprime);
         boutonSupprime.setOnClickListener(boutonSupprimeListener);
-
-
         boutonValide=(Button) findViewById(R.id.Modifie);
         boutonValide.setOnClickListener(boutonValideListener);
         NomduCompte=(TextView) findViewById(R.id.lblNomCompteAjoute);
         date= (EditText) findViewById (R.id.editTextDate);
         montant=(EditText) findViewById(R.id.lblMontant);
         beneficiaire=(EditText) findViewById(R.id.lblBeneficiaire);
-        operationComplete=this.getIntent().getExtras().getString("OperationComplete"); //intent.putExtra("OperationComplete",op.SauveOperationString());
-
+        operationComplete=this.getIntent().getExtras().getString("OperationComplete");
         nomducompte=getIntent().getStringExtra("nomducompte");
         dateStr=getIntent().getStringExtra("date");
         beneficaire=getIntent().getStringExtra("beneficaire");
@@ -63,13 +60,6 @@ public class ModificationOperation extends AppCompatActivity {
         date.setText(dateStr);
         montant.setText(montantStr);
         beneficiaire.setText(beneficaire);
-
-        // il faut recupérer ce qui est modifié et le renvoyer si c'est validé sinon on annule
-
-
-
-
-
 
     }
     private View.OnClickListener boutonSupprimeListener = new View.OnClickListener() {

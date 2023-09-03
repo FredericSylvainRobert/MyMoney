@@ -99,8 +99,6 @@ public class CreationCompte extends AppCompatActivity {
                     }
                 }
             }
-
-            //////
             finish();
         }
     };

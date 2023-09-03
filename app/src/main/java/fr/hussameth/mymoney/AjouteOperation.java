@@ -66,7 +66,7 @@ public class AjouteOperation extends AppCompatActivity {
         date=(EditText) findViewById(R.id.editTextDate);
         beneficiaire=(EditText) findViewById(R.id.lblBeneficiaire);
         montant=(EditText) findViewById(R.id.lblMontant);
-        solde=(TextView) findViewById(R.id.lblSolde);
+        solde=(TextView) findViewById(R.id.montantvirement);
         labelNomDuCompte=findViewById(R.id.lblNomCompteAjoute);
         initDatePicker();
         dateButton=findViewById(R.id.datePickerButton);
@@ -119,11 +119,18 @@ public class AjouteOperation extends AppCompatActivity {
     private View.OnClickListener boutonValideListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            Log.i("DEBUG","Bouton Valide cliqué");
+            String benef=beneficiaire.getText().toString();
+            benef.replaceAll(",","_");
+            Log.i("DEBUG","Verification beneficiaire"+benef);
+            int i=0;
+            for(i=0;i<benef.length();i++)
+                if (benef.charAt(i)==',') benef.charAt(i='_');
+            Log.i("DEBUG","Verification beneficiaire"+benef);
+
             Intent data = new Intent();
             data.putExtra("nomducompte",nomDuCompte);
             data.putExtra(MESSAGE_MONTANT, montant.getText().toString());
-            data.putExtra(MESSAGE_BENEFICIAIRE, beneficiaire.getText().toString());
+            data.putExtra(MESSAGE_BENEFICIAIRE, benef);
             data.putExtra(MESSAGE_DATE,date.getText().toString());
             data.putExtra(MESSAGE_TYPEOP,String.valueOf(typ));
             data.putExtra(MESSAGE_FREQUENCE,frequenceStr);

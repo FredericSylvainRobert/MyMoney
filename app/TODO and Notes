@@ -2,7 +2,7 @@
     //                  TODO a faire ou en cours !
     // 1 TODO si on modifie la date de répétition ou le montant, il doit être mis à jour aussi ^^
     // 2 TODO REVOIR LA R2P2ITION à partir d'un fichier
-    // 3 TODO Adapter la couleur du texte dans historique du compte en fonction debit/crédit/virement
+    // 3 TODO Lire les répétitions quan don charge un fichier et faire que les répétion du fichier!
     // 4 TODO Creer la page virement
     // 5 TODO Mettre dans l'ordre chronologique l'historique de compte position/Beneficiaire/montant
     // 6 TODO mettre les protections de , dans les saisies pour éviter les erreurs de lecture.
